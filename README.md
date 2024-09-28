@@ -309,6 +309,43 @@ And they change depending on the angle of the agent and the ball accordingly.
 Of course, each agent does not have the ability to kick the ball or move to a position outside the boundaries of the grid:
 
 
+![Image_4.PNG](ASSETS/Image_4.PNG)
+
+Available actions are:
+- Move_up_left
+- Move_up_right
+- Move_right
+- Kick_up_left
+- Kick_left
+
+Furthermore, any of the two agents cannot be in the same cell as their opponent, or the ball.
+
+![Image_5.PNG](ASSETS/Image_5.PNG)
+
+Available actions are:
+- Move_left
+- Move_right
+- Kick_up_left
+- Kick_up_right
+- Kick_right
+
+3.1 **The Large State Space Problem**
+
+For the reinforcement learning algorithms discussed in the previous chapter to function correctly, a complete representation of the environment is necessary. In the environment we are dealing with, a complete representation includes the exact location of the ball, one agent, and their opponent.
+
+There are a total of 53 cells in the grid. Agents cannot occupy goal cells. All entities are always positioned in different cells. Therefore, we have 49 available positions for each agent and 51 available positions for the ball. The total number of possible states is:
+
+$`
+49_{Agent\ Positions} \cdot 49_{Player\ Positions} \cdot 51_{Ball\ Positions} = 122,451\ states
+`$
+
+A simple solution to address the large state space problem is to reduce the number of states by changing the environment’s representation. For instance, if we design algorithms that do not necessarily require the position of the opponent to function correctly, we can omit the opponent in each agent's implementation. In this case, the number of states would be reduced to:
+
+$`
+49_{Agent\ or\ Player\ Positions} \cdot 51_{Ball\ Positions} = 2,499\ states
+`$
+
+An implementation of **Q-Learning** based on this approach has been developed for the Agent and is presented in the full environment in section 4.3.1. **Q-Learning** can function without problems in an environment where the agent observes only itself and the ball, as long as it receives rewards based only on its own actions and not those of the opponent. However, both **Minimax-Q** and **Belief-Q** require observing the opponent, as they develop strategies based on the opponent’s movements. Therefore, a solution to the large state space problem is necessary for the correct implementation of these algorithms.
 
 
 
