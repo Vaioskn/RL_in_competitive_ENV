@@ -17,8 +17,8 @@ A Markov Decision Process (MDP), also known as "stochastic dynamic programming" 
 
 A Markov Decision Process is defined as a tuple $`(S, A, P_a, R_a)`$ where:
 
-- **$`S`** is a set of states called the state space. The state space can be discrete or continuous, such as the set of real numbers.
-- **$`A`** is a set of actions called the action space (alternatively $`A_s`$ is the set of actions available from state $`s`$).
+- $`S`$ is a set of states called the state space. The state space can be discrete or continuous, such as the set of real numbers.
+- $`A`$ is a set of actions called the action space (alternatively $`A_s`$ is the set of actions available from state $`s`$).
 - $`P_a(s, s')`$ is the probability that action $`a`$ in state $`s`$ at time $`t`$ will lead to state $`s'`$ at time $`t+1`$.
 - $`R_a(s, s')`$ is the immediate reward (or expected immediate reward) received after transitioning from state $`s`$ to state $`s'`$ due to action $`a`$.
 
