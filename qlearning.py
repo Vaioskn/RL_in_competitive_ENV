@@ -3,7 +3,7 @@ import json
 import random
 import datetime
 from state import StateActionPair
-from settings import CORNER_CELLS, EPISODES_FOR_TRAINING_Q, MIN_EPSILON_Q, MAX_EPSILON_Q, Q_LEARNING_WITHOUT_OPPONENT_AGENT, Q_LEARNING_WITHOUT_OPPONENT_PLAYER, FALSE_INCREASE
+from settings import CORNER_CELLS, EPISODES_FOR_TRAINING_Q, MIN_EPSILON_Q, MAX_EPSILON_Q, Q_LEARNING_WITHOUT_OPPONENT_AGENT, Q_LEARNING_WITHOUT_OPPONENT_PLAYER
 from utilities import hex_center, manhattan_distance
 
 class QLearningAgent:
