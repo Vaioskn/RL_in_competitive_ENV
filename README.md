@@ -903,7 +903,7 @@ In conclusion, this research highlights the superiority of **Minimax-Q** and **B
 
 [1] M. L. Puterman, *Markov Decision Processes: Discrete Stochastic Dynamic Programming*, 2nd Edition, Hoboken, NJ: Wiley, 1994.
 
-[2] W. C. "Markov decision process," 2024. Available: https://en.wikipedia.org/wiki/Markov_decision_process.
+[2] W. C. "Markov decision process," 2024. Available: https://wikipedia.org/wiki/Markov_decision_process.
 
 [3] U. Berkley, *SP14 CS188 Lecture 9 -- MDPs II*, 2018.
 
