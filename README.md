@@ -1,56 +1,14 @@
-UNIVERSITY OF PIRAEUS
-
-![0_image_0.png](ASSETS/0_image_0.png)
-
-SCHOOL OF INFORMATION AND TELECOMMUNICATION TECHNOLOGIES
-DEPARTMENT OF DIGITAL SYSTEMS
-THESIS
-Study of reinforcement learning algorithms in a competitive environment Vaios Konstantopoulos Supervisor: Professor George **Vouros**
+Study of reinforcement learning algorithms in a competitive environment
 PIRAEUS 
 SEPTEMBER 2024
 
 # Abstract
 
-This thesis focuses on the development and study of a program where two agents play soccer in a deterministic environment. The agents are opponents and use reinforcement learning algorithms for decision-making, specifically the Q-Learning, Minimax-Q, and Belief-Q algorithms. The objective of the work is to evaluate the effectiveness of various reinforcement learning algorithms in a competitive environment where the agents have opposing goals. The methodology involves developing a simulated soccer environment where agents learn to play soccer by interacting with the environment and the opponent. The Q- Learning algorithm was used as the primary learning algorithm, while Minimax-Q and Belief-Q were introduced to study agent performance in more complex decisionmaking scenarios that require predicting the opponent's moves. The main steps taken include the initial implementation of the algorithms, adapting them to the soccer environment, and conducting experiments to evaluate the strategies developed. The results showed that each algorithm has different strengths and weaknesses depending on the opponent's strategy. SUBJECT AREA: Artificial Intelligence/ Machine Learning KEYWORDS: 
-1. Non-zero-sum game 2. Markov Decision Processes 3. Q-Learning 4. Minimax-Q 5. Belief-Q
+This thesis focuses on the development and study of a program where two agents play soccer in a deterministic environment. The agents are opponents and use reinforcement learning algorithms for decision-making, specifically the Q-Learning, Minimax-Q, and Belief-Q algorithms. The objective of the work is to evaluate the effectiveness of various reinforcement learning algorithms in a competitive environment where the agents have opposing goals. The methodology involves developing a simulated soccer environment where agents learn to play soccer by interacting with the environment and the opponent. The Q- Learning algorithm was used as the primary learning algorithm, while Minimax-Q and Belief-Q were introduced to study agent performance in more complex decisionmaking scenarios that require predicting the opponent's moves. The main steps taken include the initial implementation of the algorithms, adapting them to the soccer environment, and conducting experiments to evaluate the strategies developed. The results showed that each algorithm has different strengths and weaknesses depending on the opponent's strategy.
 
 ## Acknowledgements
 
 I would like to express my sincere gratitude to my supervisor, Professor George Vouros, for his invaluable guidance, unwavering support, and encouragement throughout the course of this thesis. His knowledge and experience were crucial to the completion of this study.
-
-# Contents
-
-| PREFACE                             |                                                                                                                                                               |
-|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1.                                  | INTRODUCTION .                                                                                                                                                |
-| 2.                                  | Theoretical Background and Reinforcement Learning Algorithms .                                                                                                |
-| 2.1                                 | Markov Decision Processes (MDPs)                                                                                                                              |
-| 2.2                                 | Q - Learning .                                                                                                                                                |
-| 2.3                                 | Minimax - Q.                                                                                                                                                  |
-| 2.4                                 | Belief - Q                                                                                                                                                    |
-| 3.                                  | Design of the Environment and Handling State Complexity .................................................................................................. 15 |
-| 3.1                                 | Description of the Environment                                                                                                                                |
-| 3.1                                 | The Large State Space Problem                                                                                                                                 |
-| 3.1                                 | The Solution to the Large State Space Problem                                                                                                                 |
-| 4.                                  | Training of Algorithms and Evaluation of Results.                                                                                                             |
-| 4.1                                 | The SE2G Environment .                                                                                                                                        |
-| 4.1.1                               | Q - Learning .                                                                                                                                                |
-| 4.1.2                               | Minimax - Q.                                                                                                                                                  |
-| 4.1.3                               | Belief - Q .                                                                                                                                                  |
-| 4.1.1                               | Evaluation of Results in SE6G                                                                                                                                 |
-| 4.2 The SE6G Environment .          |                                                                                                                                                               |
-| 4.2.1                               | Q - Learning .                                                                                                                                                |
-| 4.2.2                               | Minimax - Q.                                                                                                                                                  |
-| 4.2.3                               | Belief - Q .                                                                                                                                                  |
-| 4.1.1                               | Evaluation of Results in SE6G                                                                                                                                 |
-| 4.3                                 |                                                                                                                                                               |
-| 4.3.1                               | Q - Learning .                                                                                                                                                |
-| 4.1.1                               | Evaluation of FE Results via SE2G and SE6G Implementations ........ 43                                                                                        |
-| 4.1                                 | Differences and Comparison of Algorithm Behaviors                                                                                                             |
-| CONCLUSION                          |                                                                                                                                                               |
-| 5.                                  |                                                                                                                                                               |
-| ABBREVIATIONS - ARCHIVES - ACRONYMS |                                                                                                                                                               |
-| BIBLIOGRAPHY .                      |                                                                                                                                                               |
 
 # Preface
 
@@ -274,7 +232,7 @@ Updating the Value Function V Based on Beliefs [7]: Where:
 
 3.1 **Description of the Environment**
 
-![14_image_0.png](14_image_0.png)
+![14_image_0.png](ASSETS/14_image_0.png)
 
 Image 1: The Full Environment
 The **Full Environment (FE)**, or complete environment (Image 1), consists of a hexagonal grid where each cell represents a possible position for an agent or the ball. Each agent tries to score a goal in the opponent's goal. The goals are located at the two ends of the grid, to the left and right, marked with red hexagons. The agent located on the right side, represented by a circle, will be referred to as "Player" from this point on (since the user can control its movements), while the agent on the left will be called "Agent." Neither the player nor the agent can move into the goal cells. No entity (Player, Agent, or ball) can occupy or move into a cell already occupied by another entity. This is a variation of the environment described in [4]. No entity can move outside the grid. If the ball reaches the left goal, one point is added to the score on the right side (as it is considered a point for the Player). Similarly, if the ball reaches the right goal, a point is added to the left side of the score. If the ball enters a goal or a corner, the environment resets to its initial state (Image 1). The Player takes the first move at the start of the simulation, while after each reset, the first move is given to the one who did not make the last move before the reset (i.e., the one who conceded the goal or did not cause the ball to go to a corner). The buttons below the grid define the logic for selecting the corresponding agent's movement. The movements of an agent depend on its current state. For example, if an agent is far from the ball and far from the boundaries of the grid, the available movements include six possible directions (light blue cells).
@@ -286,11 +244,11 @@ Available actions are:
 
 Image **2: Example of Available Moves 1**
 
-![15_image_0.png](15_image_0.png)
+![15_image_0.png](ASSETS/15_image_0.png)
 
 In case an agent is close to the ball and away from the grid boundaries, the available
 
-![15_image_1.png](15_image_1.png) actions are three kick actions (yellow cells) and five move actions (blue cells)
+![15_image_1.png](ASSETS/15_image_1.png) actions are three kick actions (yellow cells) and five move actions (blue cells)
 
 Image 3: Example of Available Moves 2
 Available actions are:
@@ -311,11 +269,11 @@ Available actions are:
 
 Image **4: Example of Available Moves 3**
 
-![16_image_0.png](16_image_0.png)
+![16_image_0.png](ASSETS/16_image_0.png)
 
 Furthermore, any of the two agents cannot be in the same cell as their opponent, or 
 
-![16_image_1.png](16_image_1.png) the ball.
+![16_image_1.png](ASSETS/16_image_1.png) the ball.
 
 Image **5: Example of Available Moves 4**
 Available actions are:
@@ -335,7 +293,7 @@ An implementation of **Q-Learning** based on this approach has been developed fo
 
 One way to reduce the number of states is to limit the vision of an agent. In our 
 
-![18_image_0.png](18_image_0.png) environment, we can achieve a similar result by dividing the environment into smaller sub-environments and training the agent separately within these smaller environments. Specifically:
+![18_image_0.png](ASSETS/18_image_0.png) environment, we can achieve a similar result by dividing the environment into smaller sub-environments and training the agent separately within these smaller environments. Specifically:
 
 Image 6: The SE2G environment
 We define the **SE2G (Small Environment with 2 Goals)** in order to significantly reduce the state space. With a full representation of this smaller environment, we have:
@@ -345,35 +303,35 @@ A reduction of 79% compared to the full environment (FE) is achieved with the SE
 
 Image **7: Limited vision scenario leading to incomplete policies**
 
-![19_image_0.png](19_image_0.png)
+![19_image_0.png](ASSETS/19_image_0.png)
 
 In the scenario shown in **Image** 7, the Player uses a policy discovered during training 
 
-![19_image_1.png](19_image_1.png) in the SE2G environment. The paths the Player has learned are represented by red arrows. We observe that, because the Player was trained in an environment where the opponent's goal is close, the policies it has found do not represent the true optimal policies it would have discovered (green arrows) if it had been trained in the full environment. This is because the policy does not include the green cells in its possible paths—these cells can and should be used to bypass the opponent. In the SE2G environment, these cells represent corners and are thus not included in the Player's potential paths. However, in other scenarios, the policies the agent discovers during training in SE2G do match the representative moves it would have found during training in the full environment (FE).
+![19_image_1.png](ASSETS/19_image_1.png) in the SE2G environment. The paths the Player has learned are represented by red arrows. We observe that, because the Player was trained in an environment where the opponent's goal is close, the policies it has found do not represent the true optimal policies it would have discovered (green arrows) if it had been trained in the full environment. This is because the policy does not include the green cells in its possible paths—these cells can and should be used to bypass the opponent. In the SE2G environment, these cells represent corners and are thus not included in the Player's potential paths. However, in other scenarios, the policies the agent discovers during training in SE2G do match the representative moves it would have found during training in the full environment (FE).
 
 Image 8: Limited vision scenario leading to optimal policies
 In the scenario depicted in **Image** 8, although the agent was trained in a smaller 
 
-![20_image_0.png](20_image_0.png) environment, it finds itself in a position where the policies it has discovered are not limited in any way. As a result, it follows the same moves it would have made if the training had occurred in the full environment. The corners it avoids (red cells) represent the actual corners of the environment and are not cells that are crucial for finding the optimal policy. Therefore, we can use the training from the SE2G environment in the green areas below, as the policy discovery is not restricted in any way.
+![20_image_0.png](ASSETS/20_image_0.png) environment, it finds itself in a position where the policies it has discovered are not limited in any way. As a result, it follows the same moves it would have made if the training had occurred in the full environment. The corners it avoids (red cells) represent the actual corners of the environment and are not cells that are crucial for finding the optimal policy. Therefore, we can use the training from the SE2G environment in the green areas below, as the policy discovery is not restricted in any way.
 
 Image **9: Policy usage areas from SE2G training without path restriction**
 Thus, areas near the goals are regions where the agents have developed complete 
 
-![20_image_1.png](20_image_1.png) strategies, meaning that the movements in these areas can be derived from the SE2G environment implementation. To create an implementation suitable for the center of the environment, we need to modify the corners from cells of negative rewards to cells with positive rewards. This leads to the creation of the **SE6G (Small Environment with 6 Goals)**:
+![20_image_1.png](ASSETS/20_image_1.png) strategies, meaning that the movements in these areas can be derived from the SE2G environment implementation. To create an implementation suitable for the center of the environment, we need to modify the corners from cells of negative rewards to cells with positive rewards. This leads to the creation of the **SE6G (Small Environment with 6 Goals)**:
 
 Image 10: The SE6G environment
 The **SE6G environment** is specifically designed to address the shortcomings of SE2G 
 
-![21_image_0.png](21_image_0.png) and will be used to discover the policies in the center of the environment. It shifts focus away from simply scoring goals and instead emphasizes bypassing the opponent.
+![21_image_0.png](ASSETS/21_image_0.png) and will be used to discover the policies in the center of the environment. It shifts focus away from simply scoring goals and instead emphasizes bypassing the opponent.
 
 Image 11: Limited vision scenario leading to optimal center policies
 In the scenario depicted in **Image** 11, both the **Agent** and the **Player** are trained in 
 
-![21_image_1.png](21_image_1.png) movements where the goal is not necessarily to score or defend a goal, but rather to successfully or unsuccessfully bypass the opponent. The corners of the SE6G environment act as cells with positive rewards, encouraging the creation of paths that better represent the complete paths the Player would discover if trained in the full environment (FE). At the same time, the defensive movements of the Agent aim to block the Player from advancing the ball across the grid, ensuring that all areas of the grid are defended, rather than incorrectly assuming that the corners are unreachable due to low rewards. By combining the **SE2G** and **SE6G** environments, we can create an environment where agents learn policies that they would have developed if trained in the full environment, solving the problem of the large state space. We will apply the training from the SE6G environment in the following green area, allowing for more comprehensive policy learning in the center of the grid.
+![21_image_1.png](ASSETS/21_image_1.png) movements where the goal is not necessarily to score or defend a goal, but rather to successfully or unsuccessfully bypass the opponent. The corners of the SE6G environment act as cells with positive rewards, encouraging the creation of paths that better represent the complete paths the Player would discover if trained in the full environment (FE). At the same time, the defensive movements of the Agent aim to block the Player from advancing the ball across the grid, ensuring that all areas of the grid are defended, rather than incorrectly assuming that the corners are unreachable due to low rewards. By combining the **SE2G** and **SE6G** environments, we can create an environment where agents learn policies that they would have developed if trained in the full environment, solving the problem of the large state space. We will apply the training from the SE6G environment in the following green area, allowing for more comprehensive policy learning in the center of the grid.
 
 Image 12: Policy usage area from SE6G training without path restriction
 
-![22_image_0.png](22_image_0.png)
+![22_image_0.png](ASSETS/22_image_0.png)
 
 Image 13: Leverage policies from smaller environments (SE2G,SE6G) for strategy synthesis in a full environment (FE) by matching regions with trained, representative moves.
 # 4. Training Of Algorithms And Evaluation Of Results
@@ -426,7 +384,7 @@ is the value of epsilon at episode t.
 
 - max episodes is the total number of episodes over which epsilon decreases. - t is the current value of the episode The epsilon decay continued until **10,000 episodes**, where e reached 0.1, but the training continued up to **80,000 episodes**. The training was conducted simultaneously for both agents. The implementation is named according to the naming conventions as either: "SE2GQ trE=0.1" or "Q - Learning trE=0.1".
 
-![25_image_0.png](25_image_0.png)
+![25_image_0.png](ASSETS/25_image_0.png)
 
 Figure 1: Reward Curves for Q - Learning trE = 0.1 in SE2G
 Figure 1 shows on the y'y axis the average total rewards for the actions in the episodes, averaged over every 1,000 episodes. The actual x'x axis step is 1,000 episodes, but the labels are spaced at 10,000 episodes.
@@ -470,21 +428,21 @@ $$\mathbf{\partial}\cdot\mathbf{\partial}t$$
 The training was only conducted on the Agent, against the already trained SE2GQ
 trE=0.1, exE=0.1 agent, which had been trained for 80,000 episodes (as described in section 4.1.1). The Minimax-Q training lasted for 100,000 episodes for both the trE=0.1 and trE=0.05 implementations.
 
-![27_image_0.png](27_image_0.png)
+![27_image_0.png](ASSETS/27_image_0.png)
 
 Agent Average Rewards per 1000 Episodes Figure 2: Rewards Curve for Minimax - Q trE = 0.1 in SE2G
 
-![27_image_1.png](27_image_1.png)
+![27_image_1.png](ASSETS/27_image_1.png)
 
 Figure 3: Rewards Curve for Minimax - Q trE = 0.05 in SE2G
 In the implementation of Minimax-Q trE=0.05, we observe more impressive results. Initially, the average reward over every 1,000 episodes is higher. The reduced randomness (lower epsilon) significantly helped in selecting better moves, leading to the logical outcome of increased average rewards. Additionally, we see less variance in the graph values after 30,000 episodes. In other words, the Minimax-Q trE=0.05 implementation achieves greater "stability" in terms of both the number of moves and the results. Let's compare the rate at which goals were scored for the Minimax-Q
 trE=0.1 and Minimax-Q trE=0.05 implementations using difference graphs.
 
-![28_image_0.png](28_image_0.png)
+![28_image_0.png](ASSETS/28_image_0.png)
 
 Figure 4: Goal Difference Curve between Minimax - Q trE= 0.1 and Q - Learning trE = 0.1, exE = 0.1 in SE2G
 
-![28_image_1.png](28_image_1.png)
+![28_image_1.png](ASSETS/28_image_1.png)
 
 Figure 5: Goal Difference Curve between Minimax - Q trE = 0.05 and Q - Learning trE =
 0.1, exE = 0.1 in SE2G
@@ -497,22 +455,22 @@ For the next batches of episodes, up until around episode 8,000, we see that the
 Both the rewards and implementations of **Belief-Q** are identical to those mentioned for the **Minimax-Q** algorithm in the SE2G environment. It is important to note that in the **Belief-Q** implementations, the agent receives beliefs and updates its belief base after every move made by its opponent. The training sessions for these implementations were conducted against **Q-Learning trE=0.1**, similar to **Minimax-Q**, without training the Player. The training lasted up to **100,000 episodes**. According to the naming conventions, the two implementations of **Belief-Q** are named as follows:
 1. "SE2GBQ trE=0.1" or **"Belief-Q trE=0.1"**
 
-![29_image_0.png](29_image_0.png) 2. "SE2GBQ trE=0.05" or **"Belief-Q trE=0.05"**
+![29_image_0.png](ASSETS/29_image_0.png) 2. "SE2GBQ trE=0.05" or **"Belief-Q trE=0.05"**
 
 Figure 6: Rewards Curve for Belief - Q trE = 0.1 in SE2G
 
-![30_image_0.png](30_image_0.png)
+![30_image_0.png](ASSETS/30_image_0.png)
 
 Agent Average Rewards per 1000 Episodes Figure 7: Rewards Curve for Belief - Q trE = 0.05 in SE2G
 Belief-Q appears to perform well in its objective of maximizing rewards based on the opponent's moves, according to the beliefs it forms about the opponent's behavior. However, it takes significantly longer to discover strategies that work against Q-
 Learning compared to Minimax-Q. Despite this delay, we observe less variance in performance compared to Minimax-Q. In fact, the moves improve steadily until the end of the training period. However, this does not necessarily translate to scoring more goals:
 
-![30_image_1.png](30_image_1.png)
+![30_image_1.png](ASSETS/30_image_1.png)
 
 Figure 8: Goal Difference Curve between Belief - Q trE = 0.1 and Q - Learning trE = 0.1, exE = 0.1 in SE2G
 Figure 9: Goal Difference Curve between Belief - Q trE = 0.05 and Q - **Learning** 
 
-![31_image_0.png](31_image_0.png)
+![31_image_0.png](ASSETS/31_image_0.png)
 
 trE = 0.1, exE = 0.1 in SE2G
 After **100,000 episodes** of training, the difference in the number of goals scored by Belief-Q is slightly lower than that of **Minimax-Q** (particularly in the **Belief-Q trE=0.1** implementation). It is possible that with further training, the algorithm could improve even more, as the trend of increasing rewards continues until the end of training. The differences between the **Belief-Q trE=0.1** and **Belief-Q trE=0.05** implementations are similar to those observed in **Minimax-Q**. 
@@ -572,7 +530,7 @@ Agent A receives the following rewards immediately after Agent B's actions (for 
 In the SE6G environment, the Q - Learning algorithm was implemented with the same parameters as in the SE2G environment up to 80,000 episodes (So it is called SE6GQ
 trE=0.1" or "Q - Learning trE=0.1"):
 
-![33_image_0.png](33_image_0.png)
+![33_image_0.png](ASSETS/33_image_0.png)
 
 Figure 10: Rewards Curves for Q - Learning trE = 0.1 in SE6G
 In **Figure 10**, the y'y axis represents the average total rewards of the agents' moves per 1,000 episodes, while the x'x axis, though labeled in steps of 10,000 episodes, actually measures 1,000 episodes per tick. The curves are very similar, as they represent the implementation of the same algorithm (Minimax-Q) in the same environment with identical parameters. After 10,000 episodes, the rewards stabilize at a reasonable level. We observe that when one agent receives higher rewards, the opponent receives fewer rewards. Compared to the SE2G environment, we see less stability in the values but higher overall rewards (which makes sense since we converted corner cells from negative to positive reward cells). By this point, the agents have developed a good understanding of their environment, and over the last 50,000 episodes, they refine their strategies further, making scoring a goal an increasingly difficult challenge.
@@ -593,22 +551,22 @@ Two implementations of the Minimax - Q algorithm were made in the SE6G environme
 
 Agent Average Rewards per 1000 Episodes
 
-![35_image_0.png](35_image_0.png)
+![35_image_0.png](ASSETS/35_image_0.png)
 
 Figure 11: Rewards Curve for Minimax - Q trE = 0.1 in SE6G
 
-![35_image_1.png](35_image_1.png)
+![35_image_1.png](ASSETS/35_image_1.png)
 
 Figure 12: Rewards Curve for Minimax - Q trE = 0.05 in SE6G
 The differences in reward variance between Minimax-Q trE=0.1 and Minimax-Q trE=0.05, which were observed in SE2G (as discussed in section 4.1.2), are still present in SE6G but are less pronounced. In Minimax-Q trE=0.05, higher average rewards are observed compared to Minimax-Q trE=0.1, similar to the SE2G
 environment where SE2GMQ trE=0.05 outperformed SE2GMQ trE=0.1.
 
-![36_image_0.png](36_image_0.png)
+![36_image_0.png](ASSETS/36_image_0.png)
 
 Figure 13: Goal Difference Curve between Minimax - Q trE= 0.1 and Q –
 Learning trE = 0.1 in SE6G
 
-![36_image_1.png](36_image_1.png)
+![36_image_1.png](ASSETS/36_image_1.png)
 
 Figure 14: Goal Difference Curve between Minimax - Q trE = 0.05 and Q -
 Learning trE = 0.1 in SE6G
@@ -620,23 +578,23 @@ Both the rewards and implementations of Belief - Q are the same as those mention
 
 Agent Average Rewards per 1000 Episodes
 
-![37_image_0.png](37_image_0.png)
+![37_image_0.png](ASSETS/37_image_0.png)
 
 1. "SE6GBQ trE=0.1" or "Belief - Q trE=0.1" 2. "SE6GBQ trE=0.05" or "Belief - Q trE=0.05"
 
 Figure 15: Rewards Curve for Belief - Q trE = 0.1 in SE6G
 
-![37_image_1.png](37_image_1.png)
+![37_image_1.png](ASSETS/37_image_1.png)
 
 Figure 16: Rewards Curve for Belief - Q trE = 0.05 in SE6G
 We observe a sharp upward trajectory in performance that continues until the end of training, similar to what was seen in SE2G. However, this sharp increase occurs more quickly in SE6G. A notable difference is that in the Belief-Q trE=0.1 implementation
 (Figure 15), the sharp increase begins at episode 17,000, whereas in Belief-Q trE=0.05 (Figure 16), it starts at episode 28,000, meaning it starts later with lower randomness (smaller epsilon). Looking back at SE2G, the sharp increase in SE2GBQ trE=0.1 started at episode 50,000 (Figure 6), while in SE2GBQ trE=0.05, it started earlier, around episode 42,000 (Figure 7). In other words, the presence of multiple goals in combination with lower randomness makes it harder for the agent to discover effective strategies against the opponent. In contrast, in environments with a single goal, discovering strategies becomes easier with reduced randomness.
 
-![38_image_0.png](38_image_0.png)
+![38_image_0.png](ASSETS/38_image_0.png)
 
 Learning trE = 0.1, exE = 0.1 in SE6G
 
-![38_image_1.png](38_image_1.png)
+![38_image_1.png](ASSETS/38_image_1.png)
 
 Figure 18: Goal Difference Curve between Belief - Q trE = 0.05 and Q -
 Learning trE = 0.1, exE = 0.1 in SE6G
@@ -695,11 +653,11 @@ $$e_{t}~=~\operatorname*{max}\left(e_{\operatorname*{min}},~e_{\operatorname*{ma
 The **epsilon decay** occurred over the first **2,000 episodes**, but the training continued until **10,000 episodes**. The training was performed for both agents simultaneously. The implementations are named:
 1. "FEQ trE=0.1" or **"Q-Learning trE=0.1"** 2. "FEQ trE=0.05" or "Q-Learning trE=0.05"
 
-![41_image_0.png](41_image_0.png)
+![41_image_0.png](ASSETS/41_image_0.png)
 
 Figure 19: Reward Curves for Q - Learning trE = 0.1 in FE
 
-![41_image_1.png](41_image_1.png)
+![41_image_1.png](ASSETS/41_image_1.png)
 
 Figure 20: Reward Curves for Q - Learning trE = 0.05 in FE
 In Figures 19 and 20, the y'y axis represents the average total rewards for the actions in each episode, averaged over every 100 episodes. The x'x axis steps are labeled in increments of 1,000 episodes, but each actual step represents 100 episodes. The curves have a similar shape because they reflect implementations of the same algorithm (Q-Learning) in the same environment with identical parameters. There is a steady decline in the average reward per episode, similar to the pattern observed in Figure 1. This decline can be attributed to the increasing difficulty of improving strategies over time, as seen in other implementations. It's important to note that it is not feasible to implement algorithms in FE where rewards are based on the opponent's actions. Both Q-Learning implementations in FE use a reward function that assigns rewards only for the agent's own actions, not for the opponent's actions. The reason is that the state representation in FE does not include the position of the opponent. Therefore, different rewards may be assigned to the same state-action pairs during training. Although the states are technically different due to limited opponent visibility, the lack of opponent position data can result in the same state-action pair being treated differently.
@@ -757,24 +715,24 @@ The **Minimax-Q trE=0.1, exE=0.05** implementation achieves the best success rat
 
 The following graphs analyze the differences in behaviors and strategies between the trained Minimax-Q and Belief-Q implementations. These graphs were created after running the algorithms through 5,000 episodes of games, the results of which were presented in Table 3. Specifically, the executions referenced in Table 3, rows 4 and 9, were used for the following comparison:
 
-![45_image_0.png](45_image_0.png)
+![45_image_0.png](ASSETS/45_image_0.png)
 
-![45_image_2.png](45_image_2.png)
+![45_image_2.png](ASSETS/45_image_2.png)
 
 2.0% 1.7%
 
-![45_image_1.png](45_image_1.png)
+![45_image_1.png](ASSETS/45_image_1.png)
 
 Figure 21: Colorization of Minimax - Q Agent location frequencies in Goal-successful episodes
 
-![45_image_3.png](45_image_3.png)
+![45_image_3.png](ASSETS/45_image_3.png)
 
-![45_image_5.png](45_image_5.png)
+![45_image_5.png](ASSETS/45_image_5.png)
 
 2.1%
 1.9%
 
-![45_image_4.png](45_image_4.png)
+![45_image_4.png](ASSETS/45_image_4.png)
 
 Figure 22: Colorization of Minimax - Q Ball location frequencies in Goal-successful episodes
 Figures 21 and 22 depict the execution of SE2GMQ/SE6GMQ/FEQ with trE = 0.1 and exE = 0.1, against SE2GQ/SE6GQ/FEQ with the same parameters (see Table 3, row 4), focusing on episodes where Minimax-Q managed to score. In Figure 21, the frequency of the agent's position in each cell of the environment is presented. The color of each cell corresponds to the percentage of total states in which the agent was located in that specific cell. The percentages displayed within the cells indicate this exact ratio, offering a visual representation of the density of the agent's movements during the episodes that led to goals. Darker colors indicate areas where the agent was found more frequently, while lighter colors indicate areas with less presence of the agent.
@@ -783,26 +741,26 @@ Figure 22 depicts the frequency of the ball's position in each cell during the s
 
 Darker colors indicate areas where the ball was more concentrated, while lighter colors show areas with less presence of the ball. This figure provides a visual understanding of the ball's movements during the successful attempts of Minimax-Q to score. The density of the ball's positions around the central area of the field suggests critical action zones that were decisive for scoring goals.
 
-![46_image_1.png](46_image_1.png)
+![46_image_1.png](ASSETS/46_image_1.png)
 
-![46_image_0.png](46_image_0.png)
+![46_image_0.png](ASSETS/46_image_0.png)
 
  Figure 23: Colorization of Belief - Q Agent location frequencies in Goal-successful episodes
 
-![46_image_2.png](46_image_2.png)
+![46_image_2.png](ASSETS/46_image_2.png)
 
 1.5%
 
-![46_image_3.png](46_image_3.png)
+![46_image_3.png](ASSETS/46_image_3.png)
 
 Figure 24: Colorization of Belief - Q Ball location frequencies in Goal-successful episodes
 Figures 23 and 24 show the frequency of the agent's and the ball's positions, respectively, during episodes where **Belief-Q** managed to score. As in the previous figures, the percentages in the cells indicate the frequency of the agent's or the ball's presence in each specific cell. These figures correspond to the execution of SE2GBQ/SE6GBQ/FEQ trE = 0.1, exE = 0.1, against SE2GQ/SE6GQ/FEQ with the same parameters (see Table 3, row 9). Minimax-Q policies tend to push the ball towards the area near the right goal, mainly using the right side of the field and the area just past the center (Figure 22). **MinimaxQ** policies focus on attacks originating from the right side and the middle of the field, with particular emphasis on bringing the ball close to the opponent's goal through these paths (Figures 21, 22). The defense is more concentrated, mainly protecting the right side and the central area of the field. Belief-Q policies choose to attack mainly from the central area of the field, with the ball often concentrated in positions just past the center and right in front of the opponent's goal (Figure 23). The defensive strategy is more balanced, covering the entire central area, creating a "wall" that prevents the opponent from advancing the ball (Figure 23). In Figures 21, 22, 23, and 24, below the grid of each figure, there is a number labeled "Total." This number represents the total number of state transitions that occurred during the episodes being examined. State transitions refer to the changes in the position of the agent, the ball, or the opponent within the field environment as the agent progresses towards its goal, i.e., scoring a goal. Specifically, **Minimax-Q** policies exhibited **427,212 state transitions** (for the ball frequency analysis, Figure 22), while **Belief-Q** policies exhibited **289,205 transitions** (Figure 24). This means that **Minimax-Q** policies had **1.47 times more state** transitions compared to **Belief-Q** policies. The larger number of state transitions in **Minimax-Q** policies indicates that agents following this strategy made more moves and position changes to reach their goal, i.e., to score a goal. This may suggest that **Minimax-Q** policies involve a more detailed approach, where each move is significant for achieving the desired result. In contrast, **Belief-Q** policies, with fewer transitions, appear to be more efficient in terms of the number of moves required to achieve the goal. This may suggest that Belief-Q policies are more targeted and effective, allowing agents to reach their goal with fewer position changes and a more direct path. The difference in state transitions is significant because it reveals aspects of the behavior and efficiency of the strategies followed by the algorithms. A higher number of transitions may indicate greater flexibility but also more complex movements, while a lower number may signal more direct and efficient strategies.
 
-![48_image_0.png](48_image_0.png)
+![48_image_0.png](ASSETS/48_image_0.png)
 
 Figure 25: Histogram of selection frequency of different kinds of Minimax - Q moves
 
-![48_image_1.png](48_image_1.png)
+![48_image_1.png](ASSETS/48_image_1.png)
 
 Figure 26: Histogram of selection frequency of different kinds of Belief - Q moves
 Figures 25 and 26 present histograms showing the frequency of different actions chosen by the policies of **Minimax-Q** (Figure 25) and **Belief-Q** (Figure 26). The vertical axis shows the number of times each action was selected, while the horizontal axis shows the different types of actions available to the agents, such as moving in specific directions and kicking the ball in specific directions. An interesting difference between the policies of the two algorithms is their preference for different types of actions. In **Figure 25**, it is evident that **Minimax-Q** policies strongly favor moving to the right and kicking the ball to the right, with the two most frequently selected actions being "move_right" and "kick_right." This preference indicates that **Minimax-Q** policies focus on an aggressive strategy centered around one direction, trying to push the ball toward the opponent's goal. In contrast, **Figure 26** shows that **Belief-Q** policies display greater variety in the actions selected. While "move_right" remains the most frequent action, **Belief-Q**
@@ -811,13 +769,13 @@ policies more evenly select movements in various directions, such as "move_left,
 
 Figure 27: Comparison histograms of ball control frequency between Minimax - Q and Q - **Learning**
 
-![49_image_0.png](49_image_0.png)
+![49_image_0.png](ASSETS/49_image_0.png)
 
 Figure 28: Comparison histograms of ball control frequency between Belief - Q and Q - **Learning**
 
-![50_image_0.png](50_image_0.png)
+![50_image_0.png](ASSETS/50_image_0.png)
 
-![50_image_1.png](50_image_1.png)
+![50_image_1.png](ASSETS/50_image_1.png)
 
 Figures 27 and 28 present histograms comparing the frequency with which the policies of **Minimax-Q** (Figure 27) and **Belief-Q** (Figure 28) choose to be in control of the ball, compared to the opponent using the **Q-Learning** algorithm.
 
