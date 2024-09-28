@@ -15,29 +15,27 @@ A Markov Decision Process (MDP), also known as "stochastic dynamic programming" 
 
 ### Markov Decision Process (MDP)
 
-A Markov Decision Process is defined as a tuple \( (S, A, P_a, R_a) \) where:
+A Markov Decision Process is defined as a tuple $`(S, A, P_a, R_a)`$ where:
 
-- **S** is a set of states called the state space. The state space can be discrete or continuous, such as the set of real numbers.
-- **A** is a set of actions called the action space (alternatively \( A_s \) is the set of actions available from state s).
-- \( P_a(s, s') \) is the probability that action a in state s at time t will lead to state \( s' \) at time \( t+1 \).
-- \( R_a(s, s') \) is the immediate reward (or expected immediate reward) received after transitioning from state s to state \( s' \) due to action a.
+- **$`S`** is a set of states called the state space. The state space can be discrete or continuous, such as the set of real numbers.
+- **$`A`** is a set of actions called the action space (alternatively $`A_s`$ is the set of actions available from state $`s`$).
+- $`P_a(s, s')`$ is the probability that action $`a`$ in state $`s`$ at time $`t`$ will lead to state $`s'`$ at time $`t+1`$.
+- $`R_a(s, s')`$ is the immediate reward (or expected immediate reward) received after transitioning from state $`s`$ to state $`s'`$ due to action $`a`$.
 
-Additionally, there is at least one initial state \( S_0 \) and possibly a terminal state \( S_{Goal} \).
+Additionally, there is at least one initial state $`S_0`$ and possibly a terminal state $`S_{Goal}`$.
 
-The objective in a Markov Decision Process is to find a good "policy" for the decision-maker, meaning a function π that specifies the action π(s) to be taken when in state s. Once an MDP is paired with a policy in this way, the resulting state-action combinations behave like a Markov chain, as the action chosen in state s is entirely determined by π(s), assuming the policy is deterministic [2].
+The objective in a Markov Decision Process is to find a good "policy" for the decision-maker, meaning a function $`\pi`$ that specifies the action $`\pi(s)`$ to be taken when in state $`s`$. Once an MDP is paired with a policy in this way, the resulting state-action combinations behave like a Markov chain, as the action chosen in state $`s`$ is entirely determined by $`\pi(s)`$, assuming the policy is deterministic [2].
 
 To manage randomness, we maximize the expected sum of rewards. Generally [3]:
 
-\[
-\pi^* = \arg\max_{\pi} \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 \sim p(s_0), a_t \sim \pi(\cdot \mid s_t), s_{t+1} \sim p(\cdot \mid s_t, a_t) \right]
-\]
+$`\pi^* = \arg\max_{\pi} \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 \sim p(s_0), a_t \sim \pi(\cdot \mid s_t), s_{t+1} \sim p(\cdot \mid s_t, a_t) \right]`$
 
 Where:
 
-- **π\*:** The optimal policy that maximizes the expected total reward.
-- **\( \gamma^t \)**: The discount factor raised to the power of t, with \( 0 \leq \gamma \leq 1 \). It determines the present value of future rewards. A lower γ makes future rewards less important.
-- **\( r_t \)**: The reward received at time step t.
-- **| π**: Given policy π, it shows that the expectation is conditional on the sequence of policy π.
+- $`\pi^*`$: The optimal policy that maximizes the expected total reward.
+- $`\gamma^t`$: The discount factor raised to the power of $`t`$, with $`0 \leq \gamma \leq 1`$. It determines the present value of future rewards. A lower $`\gamma`$ makes future rewards less important.
+- $`r_t`$: The reward received at time step $`t`$.
+- $`\mid \pi`$: Given policy $`\pi`$, it shows that the expectation is conditional on the sequence of policy $`\pi`$.
 
 ### Bellman Equation
 
@@ -45,75 +43,63 @@ To solve MDPs, we use variations of the Bellman equation. Specifically, through 
 
 1. **Compute optimal state values using the value iteration method**, where the Bellman equation characterizes the optimal values [3]:
 
-   \[
-   V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]
-   \]
+   $`V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]`$
 
    Where:
 
-   - **\( V^*(s) \)**: The optimal value of state s, i.e., the maximum expected total reward that can be obtained from state s.
-   - **T(s,a,s’)**: The probability of transitioning from state s to state \( s' \) when action a is taken.
-   - **R(s,a,s’)**: The reward received when action a is taken in state s and the transition to state \( s' \) occurs.
-   - **\( V^*(s') \)**: The optimal value of the next state \( s' \).
+   - $`V^*(s)`$: The optimal value of state $`s`$, i.e., the maximum expected total reward that can be obtained from state $`s`$.
+   - $`T(s,a,s')`$: The probability of transitioning from state $`s`$ to state $`s'`$ when action $`a`$ is taken.
+   - $`R(s,a,s')`$: The reward received when action $`a`$ is taken in state $`s`$ and the transition to state $`s'`$ occurs.
+   - $`V^*(s')`$: The optimal value of the next state $`s'`$.
 
    Value iteration computes these values iteratively:
 
-   \[
-   V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]
-   \]
+   $`V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]`$
 
-2. **Compute optimal state values via policy iteration**, where the Bellman equation is used to evaluate both the states and the i-th policy [3]:
+2. **Compute optimal state values via policy iteration**, where the Bellman equation is used to evaluate both the states and the $`i`$-th policy [3]:
 
-   \[
-   V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]
-   \]
+   $`V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]`$
 
    Where:
 
-   - **\( V_k^{\pi_i}(s) \)**: The estimated value of state s at the k-th iteration under policy \( \pi_i \).
-   - **T(s,π_i(s),s’)**: This is the probability of transitioning from state s to state \( s' \) when following the action proposed by policy \( \pi_i \) in state s.
-   - **R(s,π_i(s),s’)**: This is the reward received when the action chosen by policy \( \pi_i \) in state s leads to state \( s' \).
-   - **\( V_k^{\pi_i}(s') \)**: This represents the estimated value of state \( s' \) at the k-th iteration of policy evaluation under policy \( \pi_i \).
+   - $`V_k^{\pi_i}(s)`$: The estimated value of state $`s`$ at the $`k`$-th iteration under policy $`\pi_i`$.
+   - $`T(s,\pi_i(s),s')`$: This is the probability of transitioning from state $`s`$ to state $`s'`$ when following the action proposed by policy $`\pi_i`$ in state $`s`$.
+   - $`R(s,\pi_i(s),s')`$: This is the reward received when the action chosen by policy $`\pi_i`$ in state $`s`$ leads to state $`s'`$.
+   - $`V_k^{\pi_i}(s')`$: This represents the estimated value of state $`s'`$ at the $`k`$-th iteration of policy evaluation under policy $`\pi_i`$.
 
-   This equation allows us to estimate how good the policy \( \pi_i \) is in each state s. We then use the results of this evaluation to improve the policy with the following equation:
+   This equation allows us to estimate how good the policy $`\pi_i`$ is in each state $`s`$. We then use the results of this evaluation to improve the policy with the following equation:
 
-   \[
-   \pi_{i+1}(s) = \arg\max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^{\pi_i}(s') \right]
-   \]
+   $`\pi_{i+1}(s) = \arg\max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^{\pi_i}(s') \right]`$
 
    Where:
 
-   - **\( \pi_{i+1}(s) \)**: This is the updated policy for state s, which results from optimizing the expected total reward based on the current value function estimates.
-   - **\( V^{\pi_i}(s') \)**: This is the value of the next state \( s' \) under policy \( \pi_i \), obtained from the previous iterative update.
+   - $`\pi_{i+1}(s)`$: This is the updated policy for state $`s`$, which results from optimizing the expected total reward based on the current value function estimates.
+   - $`V^{\pi_i}(s')`$: This is the value of the next state $`s'`$ under policy $`\pi_i`$, obtained from the previous iterative update.
 
-   Using this equation, we choose the best action for each state, updating the policy from \( \pi_i \) to \( \pi_{i+1} \).
+   Using this equation, we choose the best action for each state, updating the policy from $`\pi_i`$ to $`\pi_{i+1}`$.
 
 ### How good is a state?
 
-The value function for state s is the expected cumulative reward from following the policy starting from state s [3]:
+The value function for state $`s`$ is the expected cumulative reward from following the policy starting from state $`s`$ [3]:
 
-\[
-V^{\pi}(s) = \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 = s, \pi \right]
-\]
+$`V^{\pi}(s) = \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 = s, \pi \right]`$
 
 Where:
 
-- **\( V^{\pi}(s) \)**: The value function for state s under policy π, representing the expected total reward starting from state s and following policy π.
-- **\( s_0 \)**: The initial state, which is equal to state s, indicating that the expected total reward starts from state s.
-- **π**: The policy, i.e., the rule that determines which action will be executed in each state.
+- $`V^{\pi}(s)`$: The value function for state $`s`$ under policy $`\pi`$, representing the expected total reward starting from state $`s`$ and following policy $`\pi`$.
+- $`s_0`$: The initial state, which is equal to state $`s`$, indicating that the expected total reward starts from state $`s`$.
+- $`\pi`$: The policy, i.e., the rule that determines which action will be executed in each state.
 
 ### How good is a state-action pair?
 
-The Q-value function for state s and action a is the expected cumulative reward from taking action a in state s and then following the policy [3]:
+The Q-value function for state $`s`$ and action $`a`$ is the expected cumulative reward from taking action $`a`$ in state $`s`$ and then following the policy [3]:
 
-\[
-Q^{\pi}(s, a) = \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 = s, a_0 = a, \pi \right]
-\]
+$`Q^{\pi}(s, a) = \mathbb{E} \left[ \sum_{t \geq 0} \gamma^t r_t \mid s_0 = s, a_0 = a, \pi \right]`$
 
 Where:
 
-- **\( Q^{\pi}(s, a) \)**: The action-value function for state s and action a under policy π. It represents the expected total reward starting from state s, taking action a, and then following policy π.
-- **\( a_0 \)**: The initial action, which is equal to action a, indicating that the policy starts by taking action a from state s.
+- $`Q^{\pi}(s, a)`$: The action-value function for state $`s`$ and action $`a`$ under policy $`\pi`$. It represents the expected total reward starting from state $`s`$, taking action $`a`$, and then following policy $`\pi`$.
+- $`a_0`$: The initial action, which is equal to action $`a`$, indicating that the policy starts by taking action $`a`$ from state $`s`$.
 
 
 Having mentioned the term of state-action pairs, we can extend and further analyze the first of the implemented reinforcement learning algorithms, the Q - Learning algorithm.
