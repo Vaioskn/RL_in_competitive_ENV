@@ -787,33 +787,132 @@ In the first row of Table 3, the Agent used Q-Learning policies with $e_{\text{m
 
 It is clear that **Q-Learning** agents trained with visibility of their opponent (i.e., when the opponent's position is included in the state representation) can decisively outperform **Q-Learning** agents that were trained without seeing the opponent. Additionally, both **Minimax-Q** and **Belief-Q** can easily defeat **Q-Learning** agents that trained with the opponent's position in their state representation. However, problems arise when **Minimax-Q** and **Belief-Q** face off against a **Q-Learning** agent that was trained *without* seeing the opponent. This is a crucial observation, and it makes sense for the following reasons:
 
+1. **Minimax-Q**:
+   - Minimax-Q is specifically trained against **Q-Learning** agents that could see the opponent during training. Therefore, the strategies it develops are effective only against such agents.
+   - When faced with a **Q-Learning** agent that cannot see the opponent, Minimax-Q struggles because this unseen opponent behaves differently. Consequently, strategies that worked during training may fail against this new type of opponent, even if this opponent is technically weaker.
+
+2. **Belief-Q**:
+   - Belief-Q develops strategies based on a belief system that is built from the behavior of a specific type of opponent (one that can see and react to the opponent’s position).
+   - If it encounters an opponent (like **Q-Learning** without opponent visibility) that behaves differently, its belief base may become less effective. The strategies built on those beliefs are tailored to the expected behaviors of the opponent it trained against, not the new, unseen one.
+
+The **Minimax-Q trE=0.1, exE=0.05** implementation achieves the best success rate against **Q-Learning trE=0.1, exE=0.05** that could see its opponent. The success of Minimax-Q here stems from its ability, developed during training in the SE6G environment, to prevent the opponent from bypassing it easily. This defensive skill is well-suited to challenging environments where the opponent’s moves must be anticipated and countered.
+
+Through testing these algorithms in the **FE** environment, we can also uncover specific behavioral differences between **Minimax-Q** and **Belief-Q**.
+
+# 4.1 Differences and Comparison of Algorithm Behaviors
+
+The following graphs analyze the differences in behaviors and strategies between the trained **Minimax-Q** and **Belief-Q** implementations. These graphs were created after running the algorithms through **5,000 episodes** of games, the results of which were presented in **Table 3**. Specifically, the executions referenced in **Table 3**, rows 4 and 9, were used for the following comparison:
+
+![Figure_21.PNG](ASSETS/Figure_21.PNG)
+
+![Figure_22.PNG](ASSETS/Figure_22.PNG)
+
+Figures 21 and 22 depict the execution of **SE2GMQ/SE6GMQ/FEQ with trE = 0.1 and exE = 0.1**, against **SE2GQ/SE6GQ/FEQ with the same parameters** (see **Table 3**,row 4), focusing on episodes where **Minimax-Q** managed to score. In **Figure 21**, the frequency of the agent's position in each cell of the environment is presented. The color of each cell corresponds to the percentage of total states in which the agent was located in that specific cell. The percentages displayed within the cells indicate this exact ratio, offering a visual representation of the density of the agent's movements during the episodes that led to goals. Darker colors indicate areas where the agent was found more frequently, while lighter colors indicate areas with less presence of the agent.
+
+**Figure 22** depicts the frequency of the ball’s position in each cell during the same episodes where **Minimax-Q** managed to score. As in **Figure 21**, the color of each cell corresponds to the percentage of total states in which the ball was located in that specific cell. The percentages displayed within the cells show how often the ball was in that position relative to the total number of states.
+
+Darker colors indicate areas where the ball was more concentrated, while lighter colors show areas with less presence of the ball. This figure provides a visual understanding of the ball’s movements during the successful attempts of **Minimax-Q** to score. The density of the ball’s positions around the central area of the field suggests critical action zones that were decisive for scoring goals.
+
+![Figure_23.PNG](ASSETS/Figure_23.PNG)
+
+![Figure_24.PNG](ASSETS/Figure_24.PNG)
 
 
+Figures 23 and 24 show the frequency of the agent’s and the ball’s positions, respectively, during episodes where **Belief-Q** managed to score. As in the previous figures, the percentages in the cells indicate the frequency of the agent’s or the ball’s presence in each specific cell. These figures correspond to the execution of **SE2GBQ/SE6GBQ/FEQ trE = 0.1, exE = 0.1**, against **SE2GQ/SE6GQ/FEQ with the same parameters** (see Table 3, row 9).
+
+**Minimax-Q** policies tend to push the ball towards the area near the right goal, mainly using the right side of the field and the area just past the center (Figure 22). **Minimax-Q** policies focus on attacks originating from the right side and the middle of the field, with particular emphasis on bringing the ball close to the opponent's goal through these paths (Figures 21, 22). The defense is more concentrated, mainly protecting the right side and the central area of the field.
+
+**Belief-Q** policies choose to attack mainly from the central area of the field, with the ball often concentrated in positions just past the center and right in front of the opponent’s goal (Figure 23). The defensive strategy is more balanced, covering the entire central area, creating a "wall" that prevents the opponent from advancing the ball (Figure 23).
+
+In Figures 21, 22, 23, and 24, below the grid of each figure, there is a number labeled "Total." This number represents the total number of state transitions that occurred during the episodes being examined. State transitions refer to the changes in the position of the agent, the ball, or the opponent within the field environment as the agent progresses towards its goal, i.e., scoring a goal.
+
+Specifically, **Minimax-Q** policies exhibited **427,212 state transitions** (for the ball frequency analysis, Figure 22), while **Belief-Q** policies exhibited **289,205 transitions** (Figure 24). This means that **Minimax-Q** policies had **1.47 times more state transitions** compared to **Belief-Q** policies.
+
+The larger number of state transitions in **Minimax-Q** policies indicates that agents following this strategy made more moves and position changes to reach their goal, i.e., to score a goal. This may suggest that **Minimax-Q** policies involve a more detailed approach, where each move is significant for achieving the desired result.
+
+In contrast, **Belief-Q** policies, with fewer transitions, appear to be more efficient in terms of the number of moves required to achieve the goal. This may suggest that **Belief-Q** policies are more targeted and effective, allowing agents to reach their goal with fewer position changes and a more direct path.
+
+The difference in state transitions is significant because it reveals aspects of the behavior and efficiency of the strategies followed by the algorithms. A higher number of transitions may indicate greater flexibility but also more complex movements, while a lower number may signal more direct and efficient strategies.
 
 
+![Figure_25.PNG](ASSETS/Figure_25.PNG)
+
+![Figure_26.PNG](ASSETS/Figure_26.PNG)
+
+Figures 25 and 26 present histograms showing the frequency of different actions chosen by the policies of Minimax-Q (Figure 25) and Belief-Q (Figure 26). The vertical axis shows the number of times each action was selected, while the horizontal axis shows the different types of actions available to the agents, such as moving in specific directions and kicking the ball in specific directions.
+
+An interesting difference between the policies of the two algorithms is their preference for different types of actions. In Figure 25, it is evident that Minimax-Q policies strongly favor moving to the right and kicking the ball to the right, with the two most frequently selected actions being "move_right" and "kick_right." This preference indicates that Minimax-Q policies focus on an aggressive strategy centered around one direction, trying to push the ball toward the opponent’s goal.
+
+In contrast, Figure 26 shows that Belief-Q policies display greater variety in the actions selected. While "move_right" remains the most frequent action, Belief-Q policies more evenly select movements in various directions, such as "move_left," "move_down_right," and "move_up_left," and less frequently choose to kick the ball to the right. This suggests that Belief-Q policies are more flexible and adapt to a more diverse strategy, possibly to deal with the uncertainty of their opponent more effectively.
+
+The differences in action choices suggest that Minimax-Q policies follow a more rigid strategy primarily based on advancing to the right. On the other hand, Belief-Q policies seem to adopt a more balanced and adaptive approach, allowing them to explore more directions and respond more dynamically to the opponent’s movements. This flexibility may give them an advantage in environments with greater uncertainty or in situations where the opponent’s strategy is not easily predictable.
+
+![Figure_27.PNG](ASSETS/Figure_27.PNG)
+
+![Figure_28.PNG](ASSETS/Figure_28.PNG)
+
+Figures 27 and 28 present histograms comparing the frequency with which the policies of *Minimax-Q* (Figure 27) and *Belief-Q* (Figure 28) choose to be in control of the ball, compared to the opponent using the *Q-Learning* algorithm.
+
+- **Figure 27: Minimax-Q versus Q-Learning**
+  - The blue histogram represents the *Minimax-Q* policies, while the red represents the opponent's policies (*Q-Learning*).
+  - The left side of each chart shows the number of times the policies choose to be "next to the ball," meaning in a position that allows the agent to control the ball. In contrast, the right side shows the number of times the policies choose not to be "next to the ball."
+
+- **Figure 28: Belief-Q versus Q-Learning**
+  - The blue histogram represents the *Belief-Q* policies, while the red represents the opponent's policies (*Q-Learning*).
+  - As in Figure 27, the left side of each chart shows the frequency of "next to the ball," and the right side shows the frequency of "not next to the ball."
+
+From the analysis of the figures, it becomes clear that both strategies (*Minimax-Q* and *Belief-Q*) tend to avoid frequent contact with the ball, in contrast to the opponent (*Q-Learning*), who chooses a more balanced presence in both ball control and non-ball control situations. Specifically:
+
+- **Minimax-Q (Figure 27):** The *Minimax-Q* policies show a clear preference for yielding control of the ball to the opponent, as shown by the higher blue histogram on the right (Not Next to Ball). The opponent (*Q-Learning*) is more balanced between the two states, although it also prefers to some extent not to be next to the ball.
+
+- **Belief-Q (Figure 28):** The *Belief-Q* policies exhibit a similar behavior to *Minimax-Q*, but even more pronounced. *Belief-Q* avoids direct contact with the ball even more, leaving it to the opponent (*Q-Learning*), who again chooses a more balanced approach.
+
+These results suggest that the *Minimax-Q* and *Belief-Q* policies likely choose to concede control of the ball to the opponent, preferring to focus on strategic moves that may pay off in future phases of the game. These strategies may involve actions that improve their defensive positioning or preparation for a counter-attack following the opponent’s expected move.
 
 
+# 5. CONCLUSION
+
+This study focused on the analysis and comparison of three reinforcement learning algorithms: **Q-Learning**, **Minimax-Q**, and **Belief-Q**, within a complex and competitive soccer simulation environment. The experiments conducted highlighted the differences in the performance of the algorithms when trained in environments of varying complexity and strategy. While **Q-Learning** was effective in simpler scenarios, it significantly lagged behind **Minimax-Q** and **Belief-Q**, especially in situations where the estimation and prediction of the opponent’s actions played a crucial role.
+
+Training the algorithms in sub-environments, (**SE2G** and **SE6G**), proved to be crucial for developing effective strategies in the full environment (**FE**). The **Minimax-Q** and **Belief-Q** algorithms developed abilities that allowed them to outperform **Q-Learning**, leveraging their ability to consider the opponent’s reactions and adjust their strategies accordingly. Notably, **Minimax-Q** excelled in its ability to develop defensive strategies that minimized the opponent’s success, while **Belief-Q** demonstrated greater adaptability, although it took longer to develop effective strategies compared to **Minimax-Q**.
+
+In conclusion, this research highlights the superiority of **Minimax-Q** and **Belief-Q** algorithms over **Q-Learning** in competitive environments, mainly due to their ability to predict and respond to the strategies of their opponents. However, their performance significantly depends on their training in representative and well-designed environments. This knowledge can be used to create improved algorithms suitable for applications that require strategic intelligence and adaptability in dynamic conditions.
 
 
+# ABBREVIATIONS - ARCHIVES - ACRONYMS
+
+| Abbreviation | Description                                    |
+|--------------|------------------------------------------------|
+| RL           | Reinforcement Learning                         |
+| MDPs         | Markov Decision Processes                      |
+| FE           | Full Environment                               |
+| SE2G         | Small Environment with 2 Goals                 |
+| SE6G         | Small Environment with 6 Goals                 |
+| trE          | Training Epsilon                               |
+| exE          | Execution Epsilon                              |
+| FEQ          | Full Environment Q – Learning Implementation   |
+| SE2GQ        | SE2G Environment Q – Learning Implementation   |
+| SE2GMQ       | SE2G Environment Minimax – Q Implementation    |
+| SE2GBQ       | SE2G Environment Belief – Q Implementation     |
+| SE6GQ        | SE6G Environment Q – Learning Implementation   |
+| SE6GMQ       | SE6G Environment Minimax – Q Implementation    |
+| SE6GBQ       | SE6G Environment Belief – Q Implementation     |
 
 
+# BIBLIOGRAPHY
 
+[1] M. L. Puterman, *Markov Decision Processes: Discrete Stochastic Dynamic Programming*, 2nd Edition, Hoboken, NJ: Wiley, 1994.
 
+[2] W. C. "Markov decision process," 2024. Available: https://en.wikipedia.org/wiki/Markov_decision_process.
 
+[3] U. Berkley, *SP14 CS188 Lecture 9 -- MDPs II*, 2018.
 
+[4] M. Veloso and W. Uther, "Adversarial Reinforcement Learning," January 2003.
 
+[5] C. J. C. H. Watkins and P. Dayan, "Q-learning," *Machine Learning*, vol. 8, no. 3, pp. 279-292, 1992.
 
+[6] M. L. Littman, "Markov games as a framework for multi-agent reinforcement learning," *Machine Learning*, pp. 157-163, 1994.
 
-
-
-
-
-
-
-
-
-
-
-
+[7] Y. Shoham and K. Leyton-Brown, *MULTIAGENT SYSTEMS: Algorithmic, Game-Theoretic, and Logical Foundations*, Revision 1.1 επμ., Cambridge University Press, 2009.
 
 
