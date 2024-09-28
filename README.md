@@ -383,8 +383,180 @@ To create an implementation suitable for the center of the environment, we need 
 ![Image_10.PNG](ASSETS/Image_10.PNG)
 
 
+The **SE6G environment** is specifically designed to address the shortcomings of SE2G and will be used to discover the policies in the center of the environment. It shifts focus away from simply scoring goals and instead emphasizes bypassing the opponent.
+
+![Image_11.PNG](ASSETS/Image_11.PNG)
+
+In the scenario depicted in Image 11, both the **Agent** and the **Player** are trained in movements where the goal is not necessarily to score or defend a goal, but rather to successfully or unsuccessfully bypass the opponent. The corners of the SE6G environment act as cells with positive rewards, encouraging the creation of paths that better represent the complete paths the Player would discover if trained in the full environment (FE). At the same time, the defensive movements of the Agent aim to block the Player from advancing the ball across the grid, ensuring that all areas of the grid are defended, rather than incorrectly assuming that the corners are unreachable due to low rewards.
+
+By combining the **SE2G** and **SE6G** environments, we can create an environment where agents learn policies that they would have developed if trained in the full environment, solving the problem of the large state space. 
+
+We will apply the training from the SE6G environment in the following green area, allowing for more comprehensive policy learning in the center of the grid.
+
+![Image_12.PNG](ASSETS/Image_12.PNG)
+
+![Image_13.PNG](ASSETS/Image_13.PNG)
+
+# 4. Training of Algorithms and Evaluation of Results
+
+The training of the three algorithms with a full representation of the environment was conducted in the two smaller environments (SE2G, SE6G). Additionally, there was one instance of training **Q-Learning** in the full environment (FE) where the opponent's position was omitted from the state representation. The rewards were slightly adjusted depending on the environment.
+
+To facilitate the identification of a specific algorithm implementation, the following naming rules are used: Each implementation name follows the pattern: **XXXYYYY ZZZZ**
+
+Where:
+- **XXXX** refers to the environment (SE2G, SE6G, FE), and it is optional.
+- **YYYY** refers to the algorithm (Q = Q-Learning, MQ = Minimax-Q, BQ = Belief-Q). It can be written out fully if the **XXXX** field is omitted.
+- **ZZZZ** refers to the parameters and includes the following options:
+  1. **trE** = training Epsilon (the minimum value that epsilon will reach after a certain number of episodes during training. The maximum value is always 1.0).
+  2. **exE** = execution Epsilon (the constant epsilon value used during the execution of a trained algorithm. This is not used for describing a training implementation).
+- If two parameters are included in the **ZZZZ** field, they are separated by a comma (“,”).
+- If multiple environments are used in the **YYYY** field, the above naming conventions are not applied. Instead, specialized rules are used for specific cases.
+
+The experiments conducted in each environment, for each algorithm, only differed based on the trE and exE parameters.
+
+The rationale behind the experiments with varying e values during the training and execution phases of the **Q-Learning**, **Minimax-Q**, and **Belief-Q** algorithms was to explore how randomness affects their performance at each stage. Specifically, two different randomness strategies were used, where e decreased gradually from 1.0 to 0.1 and 0.05 during training. This was done to assess how exploration of the environment impacts the learning process and the final optimization of strategies.
+
+In the execution phase, with the algorithms already trained, constant e values (0.1 and 0.05) were used to evaluate the performance of the strategies under different levels of randomness, without further learning. Through these experiments, the goal was to understand the sensitivity of the algorithms to the randomness parameters and to determine the conditions that lead to optimal performance both during learning and when applying the trained strategies.
 
 
+# 4.1 The SE2G Environment
+
+4.1.1 **Q-Learning**
+
+The rewards in the SE2G environment for Q-Learning are as follows:
+
+**Agent A receives the following rewards immediately after its actions:**
+- -1 if it moved further away from the ball.
+- +1 if the distance between the ball and the opponent's goal decreased.
+- +100 if it scored a goal in the opponent's goal.
+- -100 if it scored a goal in its own goal.
+- -10 if it pushed the ball into a corner.
+- -5 for any other move.
+
+**Agent A receives the following rewards immediately after Agent B’s actions (for the immediately previous state-action pair that occurred):**
+- +100 if Agent B scored a goal in their own goal.
+- -100 if Agent B scored a goal in Agent A’s goal.
+
+The Q-Learning algorithm was implemented in the SE2G environment with the following parameters:
+- Learning rate = 0.1
+- Discount Factor = 0.9
+- Epsilon: Linear function with $`e_{max} = 1.0, e_{min} = 0.1, \text{max episodes} = 10,000`$
+
+$`
+e_t = \max \left( e_{min}, e_{max} - \frac{e_{max} - e_{min}}{\text{max episodes}} \cdot t \right)
+`$
+
+- $`e_t`$ is the value of epsilon at episode $`t`$.
+- $`e_{max}`$ is the initial maximum value of epsilon.
+- $`e_{min}`$ is the minimum value of epsilon.
+- max episodes is the total number of episodes over which epsilon decreases.
+- $`t`$ is the current value of the episode.
+
+The epsilon decay continued until **10,000 episodes**, where $`e`$ reached 0.1, but the training continued up to **80,000 episodes**. The training was conducted simultaneously for both agents.
+
+The implementation is named according to the naming conventions as either: “SE2GQ trE=0.1” or “Q – Learning trE=0.1”.
+
+
+![Figure_1.PNG](ASSETS/Figure_1.PNG)
+
+**Figure 1** shows on the y'y axis the average total rewards for the actions in the episodes, averaged over every 1,000 episodes. The actual x'x axis step is 1,000 episodes, but the labels are spaced at 10,000 episodes.
+
+The reward curves are quite similar since they represent implementations of the same algorithm in the same environment with identical parameters. The highest average reward is observed at the point where epsilon reaches its minimum value. This indicates that the agents have already gained a good understanding of their environment. Over the next 70,000 episodes, they continue refining their strategies, making it progressively harder to score a goal, leading to a steady decline in the average reward per episode.
+
+
+4.1.2 **Minimax – Q**
+
+The rewards in the SE2G environment for **Minimax-Q** are as follows:
+
+**Agent A receives rewards for the transition from state $`s`$ to state $`s'`$:**
+- -1 if it moved further away from the ball.
+- +1 if the distance between the ball and the opponent's goal decreased.
+- +100 if the ball is in the opponent's goal.
+- -100 if the ball is in its own goal.
+- -10 if the ball was pushed into a corner.
+- -5 for any other move.
+
+The difference between **Minimax-Q** and **Q-Learning** lies in the timing of the rewards. In Minimax-Q, the state $`s'`$ is the state after the opponent’s response, meaning the reward is given based on the outcome after the opponent’s action. In contrast, Q-Learning rewards the agent immediately after its own action (or retroactively if the opponent scores).
+
+Two implementations of the **Minimax-Q** algorithm were done in the SE2G environment with the following parameters:
+- Discount Factor = 0.9
+- Learning Rate: Linear function with $`a_{max} = 0.9, a_{min} = 0.1, \text{max episodes} = 10,000`$
+
+$`
+a_t = \max \left( a_{min}, a_{max} - \frac{a_{max} - a_{min}}{\text{max episodes}} \cdot t \right)
+`$
+
+- $`a_t`$ is the learning rate at episode $`t`$.
+- $`a_{max}`$ is the initial maximum value of $`\alpha`$.
+- $`a_{min}`$ is the minimum value of $`\alpha`$.
+- max episodes is the total number of episodes over which $`\alpha`$ decreases.
+- $`t`$ is the current value of the episode.
+
+- **Epsilon**:
+  1. Linear function with $`e_{max} = 1.0, e_{min} = 0.1, \text{max episodes} = 10,000`$
+  2. Linear function with $`e_{max} = 1.0, e_{min} = 0.05, \text{max episodes} = 10,000`$
+
+$`
+e_t = \max \left( e_{min}, e_{max} - \frac{e_{max} - e_{min}}{\text{max episodes}} \cdot t \right)
+`$
+
+The names of the two implementations according to the naming conventions are:
+1. “SE2GMQ trE=0.1” or “Minimax – Q trE=0.1”
+2. “SE2GMQ trE=0.05” or “Minimax – Q trE=0.05”
+
+
+In the **Minimax-Q trE=0.1** implementation, epsilon decayed to 0.1 after 10,000 episodes and remained constant for the rest of the training. In the **Minimax-Q trE=0.05** implementation, epsilon decayed to 0.05 after 10,000 episodes and also remained constant until the end. Alpha decay also occurred over 10,000 episodes for both implementations, starting from 0.9 and reaching 0.1, where it stayed constant until the end of training.
+
+The training was only conducted on the **Agent**, against the already trained **SE2GQ trE=0.1, exE=0.1** agent, which had been trained for 80,000 episodes (as described in section 4.1.1). The **Minimax-Q** training lasted for 100,000 episodes for both the **trE=0.1** and **trE=0.05** implementations.
+
+![Figure_2.PNG](ASSETS/Figure_2.PNG)
+
+![Figure_3.PNG](ASSETS/Figure_3.PNG)
+
+In the implementation of **Minimax-Q trE=0.05**, we observe more impressive results. Initially, the average reward over every 1,000 episodes is higher. The reduced randomness (lower epsilon) significantly helped in selecting better moves, leading to the logical outcome of increased average rewards. Additionally, we see less variance in the graph values after 30,000 episodes. In other words, the **Minimax-Q trE=0.05** implementation achieves greater "stability" in terms of both the number of moves and average rewards.
+
+
+
+The results. Let's compare the rate at which goals were scored for the **Minimax-Q trE=0.1** and **Minimax-Q trE=0.05** implementations using difference graphs.
+
+![Figure_4.PNG](ASSETS/Figure_4.PNG)
+
+![Figure_5.PNG](ASSETS/Figure_5.PNG)
+
+The graphs show the difference $`Goal_{minimax-q} - Goal_{q-learning}`$ every 2,000 episodes. For example, in the first batch of 2,000 episodes, we see a value of -2000 for both **Minimax-Q trE=0.1** and **Minimax-Q trE=0.05**. This means all goals were scored by the **Q-Learning trE=0.1, exE=0.1** policy, up to a score of $`0 - 2000`$.
+
+
+For the next batches of episodes, up until around episode 8,000, we see that the **Minimax-Q** policy was not yet able to defeat the **Q-Learning** policy. However, around episode 10,000, it began discovering some strategies that allowed it to strategically defeat the opponent. By about episode 20,000, **Minimax-Q** reaches a solid point where its strategies can consistently defeat the opponent.
+
+Once again, we notice the difference in variance between the **Minimax-Q trE=0.1** and **Minimax-Q trE=0.05** implementations. The **Minimax-Q trE=0.05** implementation, with its lower randomness, not only achieves better score differences per batch of episodes but also exhibits greater stability over time.
+
+This reduced variability means that the **trE=0.05** implementation is more consistent in its ability to maintain superior performance, reflecting the positive impact of lower randomness during the training phase. As a result, it not only finds better strategies but also applies them more reliably compared to the higher randomness configuration of **trE=0.1**.
+
+4.1.3 **Belief – Q**
+
+Both the rewards and implementations of **Belief-Q** are identical to those mentioned for the **Minimax-Q** algorithm in the SE2G environment. It is important to note that in the **Belief-Q** implementations, the agent receives beliefs and updates its belief base after every move made by its opponent. The training sessions for these implementations were conducted against **Q-Learning trE=0.1**, similar to **Minimax-Q**, without training the Player. The training lasted up to **100,000 episodes**. According to the naming conventions, the two implementations of **Belief-Q** are named as follows:
+
+1. "SE2GBQ trE=0.1" or "Belief-Q trE=0.1"
+2. "SE2GBQ trE=0.05" or "Belief-Q trE=0.05"
+
+![Figure_6.PNG](ASSETS/Figure_6.PNG)
+
+
+![Figure_7.PNG](ASSETS/Figure_7.PNG)
+
+**Belief-Q** appears to perform well in its objective of maximizing rewards based on the opponent’s moves, according to the beliefs it forms about the opponent's behavior. However, it takes significantly longer to discover strategies that work against **Q-Learning** compared to **Minimax-Q**. Despite this delay, we observe less variance in performance compared to **Minimax-Q**. In fact, the moves improve steadily until the end of the training period.
+
+However, this does not necessarily translate to scoring more goals:
+
+![Figure_8.PNG](ASSETS/Figure_8.PNG)
+
+![Figure_9.PNG](ASSETS/Figure_9.PNG)
+
+After **100,000 episodes** of training, the difference in the number of goals scored by **Belief-Q** is slightly lower than that of **Minimax-Q** (particularly in the **Belief-Q trE=0.1** implementation). It is possible that with further training, the algorithm could improve even more, as the trend of increasing rewards continues until the end of training. The differences between the **Belief-Q trE=0.1** and **Belief-Q trE=0.05** implementations are similar to those observed in **Minimax-Q**.
+
+4.1.1 **Evaluation of Results in SE6G**
+
+Assuming that all implementations are trained, we can see how well they perform after games lasting **5,000 episodes**.
 
 
 
