@@ -348,10 +348,39 @@ $`
 An implementation of **Q-Learning** based on this approach has been developed for the Agent and is presented in the full environment in section 4.3.1. **Q-Learning** can function without problems in an environment where the agent observes only itself and the ball, as long as it receives rewards based only on its own actions and not those of the opponent. However, both **Minimax-Q** and **Belief-Q** require observing the opponent, as they develop strategies based on the opponent’s movements. Therefore, a solution to the large state space problem is necessary for the correct implementation of these algorithms.
 
 
+3.1 **The Solution to the Large State Space Problem**
+
+One way to reduce the number of states is to limit the vision of an agent. In our environment, we can achieve a similar result by dividing the environment into smaller sub-environments and training the agent separately within these smaller environments. Specifically:
+
+![Image_6.PNG](ASSETS/Image_6.PNG)
+
+We define the **SE2G (Small Environment with 2 Goals)** in order to significantly reduce the state space. With a full representation of this smaller environment, we have:
+
+$`
+29_{Agent\ Positions} \cdot 29_{Player\ Positions} \cdot 31_{Ball\ Positions} = 26,071\ states
+`$
+
+A reduction of **79%** compared to the full environment (FE) is achieved with the SE2G environment. Due to the smaller number of states, the successful training of agents is now feasible. However, this does not mean that the training is entirely accurate. For instance, if we train the Agent in this smaller environment and then apply the learned policy to the full environment (Full Environment, FE), we significantly limit the algorithm's capabilities, as the movements being used may not be representative of the full environment. For example:
 
 
+![Image_7.PNG](ASSETS/Image_7.PNG)
+
+In the scenario shown in Image 7, the Player uses a policy discovered during training in the SE2G environment. The paths the Player has learned are represented by red arrows. We observe that, because the Player was trained in an environment where the opponent's goal is close, the policies it has found do not represent the true optimal policies it would have discovered (green arrows) if it had been trained in the full environment. This is because the policy does not include the green cells in its possible paths—these cells can and should be used to bypass the opponent. In the SE2G environment, these cells represent corners and are thus not included in the Player’s potential paths.
+
+However, in other scenarios, the policies the agent discovers during training in SE2G do match the representative moves it would have found during training in the full environment (FE).
+
+![Image_8.PNG](ASSETS/Image_8.PNG)
 
 
+In the scenario depicted in Image 8, although the agent was trained in a smaller environment, it finds itself in a position where the policies it has discovered are not limited in any way. As a result, it follows the same moves it would have made if the training had occurred in the full environment. The corners it avoids (red cells) represent the actual corners of the environment and are not cells that are crucial for finding the optimal policy. Therefore, we can use the training from the SE2G environment in the green areas below, as the policy discovery is not restricted in any way.
+
+![Image_9.PNG](ASSETS/Image_9.PNG)
+
+Thus, areas near the goals are regions where the agents have developed complete strategies, meaning that the movements in these areas can be derived from the SE2G environment implementation.
+
+To create an implementation suitable for the center of the environment, we need to modify the corners from cells of negative rewards to cells with positive rewards. This leads to the creation of the **SE6G (Small Environment with 6 Goals)**:
+
+![Image_10.PNG](ASSETS/Image_10.PNG)
 
 
 
