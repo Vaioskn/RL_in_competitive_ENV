@@ -751,34 +751,41 @@ All trained implementations were combined to evaluate their performance over **5
 | Agent                                    | Score                    | Player                                     |
 |------------------------------------------|--------------------------|--------------------------------------------|
 | **Q-Learning**                           | **3726 – 1274 (74.52%)**  | **Q-Learning [FEQ] trE=0.1/exE=0.1**       |
-| [SE2G, SE6G+FEQ, 93.17%] trE=0.1/exE=0.1 |                          |                                            |
+| [SE2G, SE6G+FEQ, 93.17%] trE=0.1/exE=0.1  |                          |                                            |
 | **Q-Learning**                           | **3426 – 1574 (68.52%)**  | **Q-Learning [FEQ] trE=0.05/exE=0.1**      |
-| [SE2G, SE6G+FEQ, 95.01%] trE=0.1/exE=0.1 |                          |                                            |
+| [SE2G, SE6G+FEQ, 95.01%] trE=0.1/exE=0.1  |                          |                                            |
 | **Minimax-Q**                            | **2033 – 2967 (40.66%)**  | **Q-Learning [FEQ] trE=0.1/exE=0.1**       |
-| [SE2G, SE6G+FEQ, 83.50%] trE=0.1/exE=0.1 |                          |                                            |
+| [SE2G, SE6G+FEQ, 83.50%] trE=0.1/exE=0.1  |                          |                                            |
 | **Minimax-Q**                            | **4253 – 747 (85.06%)**   | **Q-Learning [SE2G, SE6G+FEQ, 93.35%]**    |
-| [SE2G, SE6G+FEQ, 85.85%] trE=0.1/exE=0.1 | trE=0.1/exE=0.1           |                                            |
+| [SE2G, SE6G+FEQ, 85.85%] trE=0.1/exE=0.1  |                          | trE=0.1/exE=0.1                             |
 | **Minimax-Q**                            | **4475 – 525 (89.5%)**    | **Q-Learning [SE2G, SE6G+FEQ, 96.04%]**    |
-| [SE2G, SE6G+FEQ, 85.85%] trE=0.1/exE=0.05| trE=0.1/exE=0.05          |                                            |
+| [SE2G, SE6G+FEQ, 85.85%] trE=0.1/exE=0.05 |                          | trE=0.1/exE=0.05                            |
 | **Minimax-Q**                            | **4282 – 718 (85.64%)**   | **Q-Learning [SE2G, SE6G+FEQ, 92.83%]**    |
-| [SE2G, SE6G+FEQ, 87.48%] trE=0.05/exE=0.1| trE=0.1/exE=0.1           |                                            |
+| [SE2G, SE6G+FEQ, 87.48%] trE=0.05/exE=0.1 |                          | trE=0.1/exE=0.1                             |
 | **Minimax-Q**                            | **4428 – 572 (88.56%)**   | **Q-Learning [SE2G, SE6G+FEQ, 95.85%]**    |
-| [SE2G, SE6G+FEQ, 89.70%] trE=0.05/exE=0.05| trE=0.1/exE=0.05         |                                            |
+| [SE2G, SE6G+FEQ, 89.70%] trE=0.05/exE=0.05|                          | trE=0.1/exE=0.05                            |
 | **Belief-Q**                             | **441 – 4559 (8.82%)**    | **Q-Learning [FEQ] trE=0.1/exE=0.1**       |
-| [SE2G, SE6G+FEQ, 88.97%] trE=0.1/exE=0.1 |                          |                                            |
+| [SE2G, SE6G+FEQ, 88.97%] trE=0.1/exE=0.1  |                          |                                            |
 | **Belief-Q**                             | **3260 – 1730 (65.2%)**   | **Q-Learning [SE2G, SE6G+FEQ, 86.75%]**    |
-| [SE2G, SE6G+FEQ, 84.94%] trE=0.1/exE=0.1 | trE=0.1/exE=0.1           |                                            |
+| [SE2G, SE6G+FEQ, 84.94%] trE=0.1/exE=0.1  |                          | trE=0.1/exE=0.1                             |
 | **Belief-Q**                             | **3377 – 1623 (66.74%)**  | **Q-Learning [SE2G, SE6G+FEQ, 87.84%]**    |
-| [SE2G, SE6G+FEQ, 86.44%] trE=0.1/exE=0.05| trE=0.1/exE=0.05          |                                            |
+| [SE2G, SE6G+FEQ, 86.44%] trE=0.1/exE=0.05 |                          | trE=0.1/exE=0.05                            |
 | **Belief-Q**                             | **2648 – 2352 (52.96%)**  | **Q-Learning [SE2G, SE6G+FEQ, 85.17%]**    |
-| [SE2G, SE6G+FEQ, 82.79%] trE=0.05/exE=0.1| trE=0.1/exE=0.1           |                                            |
+| [SE2G, SE6G+FEQ, 82.79%] trE=0.05/exE=0.1 |                          | trE=0.1/exE=0.1                             |
 | **Belief-Q**                             | **2751 – 2249 (55.02%)**  | **Q-Learning [SE2G, SE6G+FEQ, 88.12%]**    |
-| [SE2G, SE6G+FEQ, 86.57%] trE=0.05/exE=0.05| trE=0.05/exE=0.05         |                                            |
+| [SE2G, SE6G+FEQ, 86.57%] trE=0.05/exE=0.05|                          | trE=0.05/exE=0.05                           |
 
-*trE*: training epsilon after X amount of episodes (starting from 1.0)
+*trE*: training epsilon after X amount of episodes (starting from 1.0)  
 *exE*: execution epsilon
 
 
+
+By combining the SE2G and SE6G environments, we can derive representative policies for all algorithms in the full environment (FE). However, some states that were not encountered during training in the smaller environments may appear in the full environment. For all such cases, we use the FEQ trE=0.1, exE=0.1 implementation. In the table, each algorithm lists the policies used and the corresponding percentages.
+
+**Naming Convention Example:**
+In the first row of Table 3, the Agent used Q-Learning policies with $e_{\text{min}} = 0.1$ during training in both SE2G and SE6G environments and with a constant $e = 0.1$ during the 5,000 post-training episodes. Therefore, it utilized the implementations SE2GQ trE=0.1, exE=0.1 and SE6GQ trE=0.1, exE=0.1 for 93.17% of its actions. The remaining 6.83% of the actions came from the Q-Learning implementation in FE with $e_{\text{min}} = 0.1$ during training and a constant $e = 0.1$ during the 5,000 episodes (using the implementation FEQ trE=0.1, exE=0.1).
+
+It is clear that **Q-Learning** agents trained with visibility of their opponent (i.e., when the opponent's position is included in the state representation) can decisively outperform **Q-Learning** agents that were trained without seeing the opponent. Additionally, both **Minimax-Q** and **Belief-Q** can easily defeat **Q-Learning** agents that trained with the opponent's position in their state representation. However, problems arise when **Minimax-Q** and **Belief-Q** face off against a **Q-Learning** agent that was trained *without* seeing the opponent. This is a crucial observation, and it makes sense for the following reasons:
 
 
 
