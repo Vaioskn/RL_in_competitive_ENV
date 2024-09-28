@@ -559,6 +559,21 @@ After **100,000 episodes** of training, the difference in the number of goals sc
 Assuming that all implementations are trained, we can see how well they perform after games lasting **5,000 episodes**.
 
 
+**Table 1: Results of Opposing Algorithms in SE2G**
+
+| Agent                           | Score            | Player                            |
+|---------------------------------|------------------|-----------------------------------|
+| **Minimax-Q** trE=0.1, exE=0.1  | 3258 – 1742 (65.16%) | **Q-Learning** trE=0.1, exE=0.1   |
+| **Minimax-Q** trE=0.1, exE=0.05 | 3198 – 1802 (63.96%) | **Q-Learning** trE=0.1, exE=0.05  |
+| **Minimax-Q** trE=0.05, exE=0.1 | 3331 – 1669 (66.62%) | **Q-Learning** trE=0.1, exE=0.1   |
+| **Minimax-Q** trE=0.05, exE=0.05| 3346 – 1654 (66.92%) | **Q-Learning** trE=0.1, exE=0.05  |
+| **Belief-Q** trE=0.1, exE=0.1   | 3637 – 1362 (72.74%) | **Q-Learning** trE=0.1, exE=0.1   |
+| **Belief-Q** trE=0.1, exE=0.05  | 3685 – 1314 (73.7%)  | **Q-Learning** trE=0.1, exE=0.05  |
+| **Belief-Q** trE=0.05, exE=0.1  | 3178 – 1822 (63.56%) | **Q-Learning** trE=0.1, exE=0.1   |
+| **Belief-Q** trE=0.05, exE=0.05 | 3313 – 1687 (66.26%) | **Q-Learning** trE=0.1, exE=0.05  |
+
+\*trE: training epsilon after 10k episodes (starting from 1.0)  
+\*exE: execution epsilon
 
 
 
