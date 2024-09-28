@@ -36,36 +36,44 @@ Where:
 - $`\gamma^t`$: The discount factor raised to the power of $`t`$, with $`0 \leq \gamma \leq 1`$. It determines the present value of future rewards. A lower $`\gamma`$ makes future rewards less important.
 - $`r_t`$: The reward received at time step $`t`$.
 - $`\mid \pi`$: Given policy $`\pi`$, it shows that the expectation is conditional on the sequence of policy $`\pi`$.
-
-### Bellman Equation
+- $s_0 \sim p(s_0)$: The initial state $s_0$ which follows the distribution $p(s_0)$.
+- $a_t \sim \pi(\cdot \mid s_t)$: The action $a_t$ at time $t$, determined by the policy $\pi$ given the current state $s_t$.
+- $s_{t+1} \sim p(\cdot \mid s_t, a_t)$: The next state $s_{t+1}$ which is drawn from the transition probability distribution $p(\cdot \mid s_t, a_t)$, which depends on the current state $s_t$ and action $a_t$.
 
 To solve MDPs, we use variations of the Bellman equation. Specifically, through the Bellman equation, we can:
 
-1. **Compute optimal state values using the value iteration method**, where the Bellman equation characterizes the optimal values [3]:
+1. **Compute optimal state values** using the value iteration method, where the Bellman equation characterizes the optimal values [3]:
 
-   $`V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]`$
+   $$
+   V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]
+   $$
 
    Where:
 
-   - $`V^*(s)`$: The optimal value of state $`s`$, i.e., the maximum expected total reward that can be obtained from state $`s`$.
-   - $`T(s,a,s')`$: The probability of transitioning from state $`s`$ to state $`s'`$ when action $`a`$ is taken.
-   - $`R(s,a,s')`$: The reward received when action $`a`$ is taken in state $`s`$ and the transition to state $`s'`$ occurs.
-   - $`V^*(s')`$: The optimal value of the next state $`s'`$.
+   - $V^*(s)$: The optimal value of state $s$, i.e., the maximum expected total reward that can be obtained from state $s$.
+   - $T(s,a,s')$: The probability of transitioning from state $s$ to state $s'$ when action $a$ is taken.
+   - $R(s,a,s')$: The reward received when action $a$ is taken in state $s$ and the transition to state $s'$ occurs.
+   - $\gamma$: The discount factor, determining the present value of future rewards.
+   - $V^*(s')$: The optimal value of the next state $s'$.
 
    Value iteration computes these values iteratively:
 
-   $`V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]`$
+   $$
+   V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]
+   $$
 
-2. **Compute optimal state values via policy iteration**, where the Bellman equation is used to evaluate both the states and the $`i`$-th policy [3]:
+2. **Compute optimal state values via policy iteration**, where the Bellman equation is used to evaluate both the states and the $i$-th policy [3]:
 
-   $`V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]`$
+   $$
+   V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]
+   $$
 
    Where:
 
-   - $`V_k^{\pi_i}(s)`$: The estimated value of state $`s`$ at the $`k`$-th iteration under policy $`\pi_i`$.
-   - $`T(s,\pi_i(s),s')`$: This is the probability of transitioning from state $`s`$ to state $`s'`$ when following the action proposed by policy $`\pi_i`$ in state $`s`$.
-   - $`R(s,\pi_i(s),s')`$: This is the reward received when the action chosen by policy $`\pi_i`$ in state $`s`$ leads to state $`s'`$.
-   - $`V_k^{\pi_i}(s')`$: This represents the estimated value of state $`s'`$ at the $`k`$-th iteration of policy evaluation under policy $`\pi_i`$.
+   - $V_k^{\pi_i}(s)$: The estimated value of state $s$ at the $k$-th iteration under policy $\pi_i$.
+   - $T(s,\pi_i(s),s')$: This is the probability of transitioning from state $s$ to state $s'$ when following the action proposed by policy $\pi_i$ in state $s$.
+   - $R(s,\pi_i(s),s')$: This is the reward received when the action chosen by policy $\pi_i$ in state $s$ leads to state $s'$.
+   - $V_k^{\pi_i}(s')$: This represents the estimated value of state $s'$ at the $k$-th iteration of policy evaluation under policy $\pi_i$.
 
    This equation allows us to estimate how good the policy $`\pi_i`$ is in each state $`s`$. We then use the results of this evaluation to improve the policy with the following equation:
 
