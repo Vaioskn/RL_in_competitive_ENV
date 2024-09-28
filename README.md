@@ -274,14 +274,39 @@ Where:
 
 ![Image_1.PNG](ASSETS/Image_1.PNG)
 
-**Image 1: The Full Environment**
-
 The **Full Environment (FE)**, or complete environment (Image 1), consists of a hexagonal grid where each cell represents a possible position for an agent or the ball. Each agent tries to score a goal in the opponent’s goal. The goals are located at the two ends of the grid, to the left and right, marked with red hexagons. The agent located on the right side, represented by a circle, will be referred to as "Player" from this point on (since the user can control its movements), while the agent on the left will be called "Agent." Neither the player nor the agent can move into the goal cells. No entity (Player, Agent, or ball) can occupy or move into a cell already occupied by another entity. This is a variation of the environment described in [4].
 
 No entity can move outside the grid. If the ball reaches the left goal, one point is added to the score on the right side (as it is considered a point for the Player). Similarly, if the ball reaches the right goal, a point is added to the left side of the score. If the ball enters a goal or a corner, the environment resets to its initial state (Image 1). The Player takes the first move at the start of the simulation, while after each reset, the first move is given to the one who did *not* make the last move before the reset (i.e., the one who conceded the goal or did not cause the ball to go to a corner). The buttons below the grid define the logic for selecting the corresponding agent’s movement.
 
 The movements of an agent depend on its current state. For example, if an agent is far from the ball and far from the boundaries of the grid, the available movements include six possible directions (light blue cells).
 
+![Image_2.PNG](ASSETS/Image_2.PNG)
+
+Available actions are:
+- Move_up_left
+- Move_up_right
+- Move_left
+- Move_right
+- Move_down_left
+- Move_down_right
+
+![Image_3.PNG](ASSETS/Image_3.PNG)
+
+In case an agent is close to the ball and away from the grid boundaries, the available actions are three kick actions (yellow cells) and five move actions (blue cells)
+
+Available actions are:
+- Move_up_left
+- Move_up_right
+- Move_right
+- Move_down_left
+- Move_down_right
+- Kick_up_left
+- Kick_left
+- Kick_down_left
+
+And they change depending on the angle of the agent and the ball accordingly.
+
+Of course, each agent does not have the ability to kick the ball or move to a position outside the boundaries of the grid:
 
 
 
