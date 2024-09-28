@@ -913,7 +913,7 @@ In conclusion, this research highlights the superiority of **Minimax-Q** and **B
 
 [6] M. L. Littman, "Markov games as a framework for multi-agent reinforcement learning," *Machine Learning*, pp. 157-163, 1994.
 
-[7] Y. Shoham and K. Leyton-Brown, *MULTIAGENT SYSTEMS: Algorithmic, Game-Theoretic, and Logical Foundations*, Revision 1.1 επμ., Cambridge University Press, 2009.
+[7] Y. Shoham and K. Leyton-Brown, *MULTIAGENT SYSTEMS: Algorithmic, Game-Theoretic, and Logical Foundations*, Revision 1.1, Cambridge University Press, 2009.
 
 
 
