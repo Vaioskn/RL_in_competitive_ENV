@@ -44,9 +44,9 @@ To solve MDPs, we use variations of the Bellman equation. Specifically, through 
 
 1. **Compute optimal state values** using the value iteration method, where the Bellman equation characterizes the optimal values [3]:
 
-   $$
-   V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]
-   $$
+   
+   $`V^*(s) = \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V^*(s') \right]`$
+   
 
    Where:
 
@@ -58,15 +58,15 @@ To solve MDPs, we use variations of the Bellman equation. Specifically, through 
 
    Value iteration computes these values iteratively:
 
-   $$
-   V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]
-   $$
+   
+   $`V_{k+1}(s) \leftarrow \max_a \sum_{s'} T(s, a, s') \left[ R(s, a, s') + \gamma V_k(s') \right]`$
+   
 
 2. **Compute optimal state values via policy iteration**, where the Bellman equation is used to evaluate both the states and the $i$-th policy [3]:
 
-   $$
-   V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]
-   $$
+   
+   $`V_{k+1}^{\pi_i}(s) = \sum_{s'} T(s, \pi_i(s), s') \left[ R(s, \pi_i(s), s') + \gamma V_k^{\pi_i}(s') \right]`$
+   
 
    Where:
 
@@ -112,105 +112,161 @@ Where:
 
 Having mentioned the term of state-action pairs, we can extend and further analyze the first of the implemented reinforcement learning algorithms, the Q - Learning algorithm.
 
-## 2.2 Q - Learning
+### 2.2 Q-Learning
 
-The Q-Learning algorithm is based on the concept of the Q-value, which expresses the quality of an action when executed in a particular state. The Q-value of a stateaction pair is denoted as Q(s, a), representing the expected cumulative reward that the agent will receive if it takes action a in state s and then follows the optimal policy. The agent starts with a Q-value table where all Q-values are typically initialized to zero or some small random number. This table is updated gradually as the agent explores the environment. At each step, the agent finds itself in a specific state s and must select an action a. To choose the action, the algorithm uses an exploration-exploitation strategy, such as **epsilon-greedy**. The agent sometimes selects the action with the highest Qvalue (exploitation) and other times selects a random action to explore new possibilities (exploration). After executing action a in state s, the agent transitions to a new state s' and receives a reward r.
+The Q-Learning algorithm is based on the concept of the Q-value, which expresses the quality of an action when executed in a particular state. The Q-value of a state-action pair is denoted as $`Q(s, a)`$, representing the expected cumulative reward that the agent will receive if it takes action $`a`$ in state $`s`$ and then follows the optimal policy.
 
-$$Q(\,s,a)\,\leftarrow(\,1-\alpha)\,Q(\,s,a)+\alpha{\biggl[}r(\,s,a,s^{\prime})\,+\gamma{\operatorname*{max}_{a^{\prime}}}Q(\,s^{\prime},a^{\prime}){\biggr]}$$
+The agent starts with a Q-value table where all Q-values are typically initialized to zero or some small random number. This table is updated gradually as the agent explores the environment.
 
-It then updates the Q-value for the state-action pair (s, a) using the following formula [4] [5]:
+At each step, the agent finds itself in a specific state $`s`$ and must select an action $`a`$. To choose the action, the algorithm uses an exploration-exploitation strategy, such as epsilon-greedy. The agent sometimes selects the action with the highest Q-value (exploitation) and other times selects a random action to explore new possibilities (exploration).
+
+After executing action $`a`$ in state $`s`$, the agent transitions to a new state $`s'`$ and receives a reward $`r`$.
+
+It then updates the Q-value for the state-action pair $`(s, a)`$ using the following formula [4] [5]:
+
+$`
+Q(s, a) \leftarrow (1 - \alpha) Q(s, a) + \alpha \left[ r(s, a, s') + \gamma \max_{a'} Q(s', a') \right]
+`$
 
 Where:
-- α is the learning rate, which determines how quickly the Q-value is adjusted.
 
-- r(s, a, s') is the immediate reward received in state s after performing action a to transition to state s'.
-
-- ′(′, ′) is the maximum expected future reward from the next state s'.
+- $`\alpha`$ is the learning rate, which determines how quickly the Q-value is adjusted.
+- $`r(s, a, s')`$ is the immediate reward received in state $`s`$ after performing action $`a`$ to transition to state $`s'`$.
+- $`\max_{a'} Q(s', a')`$ is the maximum expected future reward from the next state $`s'`$.
 
 The agent repeats this process for many episodes, continuously updating the Q-value table as it learns the optimal actions for each state. The goal is to learn the optimal policy, i.e., the strategy that selects the actions with the highest Q-values in each state, thereby maximizing long-term rewards.
 
-## 2.3 Minimax - Q
+### 2.3 Minimax-Q
 
-The Minimax-Q algorithm is an extension of the classical Q-Learning, designed for environments where competition exists between two or more agents with conflicting interests. The main objective of Minimax-Q is to compute the optimal policy for an agent, considering that the opposing agent will choose actions that minimize the first agent's gains. The algorithm is based on zero-sum game theory, where the gains of one agent are exactly the losses of the other. Although the environment described here is a nonzero-sum game, Minimax-Q can still be applied since the agents are opponents. To find the optimal strategy, the agent solves a linear programming problem that maximizes the minimum reward it can receive, taking the opponent's actions into account.
+The Minimax-Q algorithm is an extension of the classical Q-Learning, designed for environments where competition exists between two or more agents with conflicting interests. The main objective of Minimax-Q is to compute the optimal policy for an agent, considering that the opposing agent will choose actions that minimize the first agent's gains.
 
-## Initialization:
+The algorithm is based on zero-sum game theory, where the gains of one agent are exactly the losses of the other. Although the environment described here is a non-zero-sum game, Minimax-Q can still be applied since the agents are opponents. To find the optimal strategy, the agent solves a linear programming problem that maximizes the minimum reward it can receive, taking the opponent's actions into account.
 
-For all states s in the set of states S, for all actions a in the set of actions A, and for all opponent actions o in the set of possible opponent actions O [6]:
+#### Initialization:
 
-$$Q[s,\;a,\;o]:=\,1$$
-$$V[s]:=\,1$$
+For all states $`s`$ in the set of states $`S`$, for all actions $`a`$ in the set of actions $`A`$, and for all opponent actions $`o`$ in the set of possible opponent actions $`O`$ [6]:
 
-For all states s in the state set S:
+$`
+Q[s, a, o] := 1
+`$
 
-$$\pi[s,a]\colon={\frac{1}{|A|}}$$
+For all states $`s`$ in the state set $`S`$:
 
-For all states s in the set of states S and for all actions a in the set of actions A:
+$`
+V[s] := 1
+`$
+
+For all states $`s`$ in the set of states $`S`$ and for all actions $`a`$ in the set of actions $`A`$:
+
+$`
+\pi[s, a] := \frac{1}{|A|}
+`$
+
 (At the beginning, the probability of selecting each action is equal for all actions.)
-Learning rate a initialization: Action Selection in State s:
 
-$$\alpha\!:=1\,.\,0$$
+Learning rate $\alpha$ initialization:
 
-- With probability **explor**, the agent selects an action randomly from the set of possible actions (exploration).
+$`
+\alpha := 1.0
+`$
 
-- Otherwise, the agent selects the action a with probability π[s,a] (exploitation). 
+#### Action Selection in State $`s`$:
+
+- With probability $`explor`$, the agent selects an action randomly from the set of possible actions (exploration).
+- Otherwise, the agent selects the action $`a`$ with probability $`\pi[s, a]`$ (exploitation). In this implementation, to maintain the deterministic nature of the environment, action $`a`$ is chosen with probability $`1.0`$, and it corresponds to the action with the highest probability according to the distribution $`\pi[s, \cdot]`$.
+
 
 In this implementation, to maintain the deterministic nature of the environment, action a is chosen with probability 1.0, and it corresponds to the action with the highest probability according to the distribution π[s, ⋅].
 
-$$Q[s,a,o]\colon=(\,1-\alpha)\,\cdot\,Q[s,a,o]+\alpha\cdot(\,r(\,s,a,o,s^{\prime})+\gamma\cdot V[s^{\prime}])$$
+#### Learning:
 
-After the agent receives a reward r(s,a,o,s') for transitioning from state s to state s' via action a and the opponent's action o, the Q-value is updated [6]: Where:
-- Q[s,a,o]: is the action-value function for state s, action a, and the opponent's response o. It evaluates how good it is to take action a in state s, considering the opponent's response.
+After the agent receives a reward $`r(s,a,o,s')`$ for transitioning from state $`s`$ to state $`s'`$ via action $`a`$ and the opponent's action $`o`$, the Q-value is updated [6]:
 
-- r(s, a, o ,s'): is the immediate reward received for transitioning from state s to state s' by performing action a and the opponent's response o.
+$`
+Q[s, a, o] := (1 - \alpha) \cdot Q[s, a, o] + \alpha \cdot \left( r(s, a, o, s') + \gamma \cdot V[s'] \right)
+`$
 
-- V[s′]: is the value function for the next state s', representing the expected total reward from state s' onward.
+Where:
 
-## Finding The Optimal Policy Through Linear Programming:
+- $`Q[s,a,o]`$: is the action-value function for state $`s`$, action $`a`$, and the opponent's response $`o`$. It evaluates how good it is to take action $`a`$ in state $`s`$, considering the opponent's response.
+- $`r(s, a, o, s')`$: is the immediate reward received for transitioning from state $`s`$ to state $`s'`$ by performing action $`a`$ and the opponent's response $`o`$.
+- $`V[s']`$: is the value function for the next state $`s'`$, representing the expected total reward from state $`s'`$ onward.
 
-$$\pi[s,\cdot\,]\colon=\arg\operatorname*{max}\,\operatorname*{min}_{\pi^{\prime}[s,\cdot\,]\,\,\,\,o^{\prime}}\left\{\sum_{a^{\prime}}\pi^{\prime}[s,a^{\prime}]\cdot Q[s,a^{\prime},o^{\prime}]\right\}$$
+#### Finding the Optimal Policy through Linear Programming:
 
-The agent uses linear programming to find the policy π[s,⋅] that maximizes the minimum possible Q-value, considering all possible opponent actions [6]: Where:
-- π[s, ⋅]: is the policy for state s. The policy π defines the probability of executing each action in state s.
+The agent uses linear programming to find the policy $`\pi[s, \cdot]`$ that maximizes the minimum possible Q-value, considering all possible opponent actions [6]:
 
-- π′[s,a′]: is the probability of executing action a' from state s under policy π'.
+$`
+\pi[s, \cdot] := \arg \max_{\pi[s, \cdot]} \min_{o'} \left\{ \sum_{a'} \pi[s, a'] \cdot Q[s, a', o'] \right\}
+`$
 
-Here, ′[,⋅] selects the policy π'[s, ⋅] that maximizes the expression. The updated policy π\piπ must maximize the minimum expected benefit, considering the probabilities of various actions. The ′ operator chooses the least favorable opponent action o' (i.e., the worst-case scenario for the agent). This process ensures that the agent chooses a policy that is as safe as possible against the worst possible actions from the opponent.
+Where:
 
-$${\mathrm{\boldmath~\Gamma~}}[61]\cdot$$
-$$V[s]\colon=\operatorname*{min}_{o^{\prime}}\left\{\sum_{a^{\prime}}\pi[s,a^{\prime}]\cdot Q[s,a^{\prime},o^{\prime}]\right\}$$
+- $`\pi[s, \cdot]`$: is the policy for state $`s`$. The policy $`\pi`$ defines the probability of executing each action in state $`s`$.
+- $`\pi[s,a']`$: is the probability of executing action $`a'`$ from state $`s`$ under policy $`\pi`$.
 
-Updating the Value V [6]: Where:
-- π[s,a′]: is the probability of executing action a′ from state s under policy π.
+Here, $`\arg \max_{\pi[s, \cdot]}`$ selects the policy $`\pi[s, \cdot]`$ that maximizes the expression. The updated policy $`\pi`$ must maximize the minimum expected benefit, considering the probabilities of various actions. The $`\min_{o'}`$ operator chooses the least favorable opponent action $`o'`$ (i.e., the worst-case scenario for the agent).
 
-Here, the ′ operator selects the minimum value of the expression that follows, taking into account all possible responses o′o′o′ from the opponent. This minimization represents the choice of the worst-case scenario (i.e., the least favorable action of the opponent for the Minimax-Q agent).
+This process ensures that the agent chooses a policy that is as safe as possible against the worst possible actions from the opponent.
 
-Updating the Learning Rate:
-While Q-Learning computes the policy based on the expected reward in a static environment, Minimax-Q computes the policy by considering the opponent's potential actions that would cause the most harm. This makes Minimax-Q more suitable for competitive environments where there is a direct conflict of interests between agents.
+#### Updating the Value $`V`$ [6]:
 
-Minimax-Q requires solving linear programming problems to compute the policy in each state. This is essential to ensure that the agent's policy is resilient against the possible harmful actions of the opponent. In contrast, Q-Learning simply selects the action with the highest Q-value without considering the opponent's strategy.
+$`
+V[s] := \min_{o'} \left( \sum_{a'} \pi[s, a'] \cdot Q[s, a', o'] \right)
+`$
 
-## 2.4 Belief - Q
+Where:
 
-The **Belief-Q** algorithm is a variation of Q-Learning, adapted for environments where agents must account for uncertainty regarding the strategies or actions of their opponents. This algorithm allows the agent to form **beliefs** about the possible actions of their opponents and update those beliefs as new information is received. Belief-Q aims to optimize the agent's strategy based on the potential reactions of opponents by combining Q-values with the probabilities that opponents will choose certain actions. As in classical Q-Learning, we initialize a Q-value table for all states s and actions a. Simultaneously, we initialize the beliefs regarding the actions of the opponent. Specifically, at the start, for each state and action of the agent, we create a probability table that represents our beliefs about which actions the opponent might choose. Initially, these beliefs are set to equal values, indicating no preference for any of the opponent's actions (i.e., all opponent actions are considered equally probable). As the agent interacts with the environment, these beliefs are updated based on observations of the opponent's actions, adjusting the probabilities of different opponent actions. Specifically, after each learning step, the probability of each opponent action in the belief table is updated to incorporate the new information.
+- $`\pi[s,a']`$: is the probability of executing action $`a'`$ from state $`s`$ under policy $`\pi`$.
 
-The agent selects an action a based on the policy derived from the updated Qvalues and the beliefs about the opponent's actions. For each possible action, the agent consults the Q-value table (Q-table) to find the corresponding Q-value. This value depends on the agent's beliefs about the opponent's possible actions. These beliefs determine the probability that the opponent will choose a particular action. The agent multiplies the Q-value for each combination of its own action and the opponent's action by the probability corresponding to the opponent's action, as expressed by the agent's beliefs. The result is a weighted sum of Q-values, where each Q-value for an opponent's action is weighted by the probability that the agent believes the opponent will choose that action. This process produces an overall expected value for the agent's action, taking into account the different opponent responses and their probabilities. The agent then selects the action that maximizes this expected value, attempting to find the best possible strategy based on its beliefs about the opponent's actions.
+Here, the $`\min_{o'}`$ operator selects the minimum value of the expression that follows, taking into account all possible responses $`o'o'`$ from the opponent. This minimization ensures that the agent prepares for the worst possible outcome from the opponent.
 
-$$Q_{\,\,t+\,1}(\,s_{\,\,t},a_{\,\,t}\,)\leftarrow(\,1-\alpha)\,Q_{\,\,t}(\,s_{\,\,t},a_{\,\,t}\,)+\alpha\Big[r(\,s_{\,\,t},a_{\,\,t},s_{\,\,t+\,1}\,)+\gamma V_{\,\,t}(\,s_{\,\,t+\,1}\,)\,\Big]$$
+This minimization represents the choice of the worst-case scenario (i.e., the least favorable action of the opponent for the Minimax-Q agent).
 
-After the agent receives a reward (, ) for transitioning from state to state +1 by executing action a, the Q-value is updated [7]: Where:
-- +1(, ): is the updated action-value function Q for state  and action  at time step t+1.
+#### Updating the Learning Rate:
 
-$$V_{t}(s)\leftarrow\operatorname*{max}_{a_{i}}\left[\sum_{a_{-i}\subseteq A_{-i}}Q_{t}(s,(\,a_{i},a_{-i}\,)\,)\,\cdot\,\operatorname*{Pr}_{i}(\,a_{-i}\,)\,\right]$$
+$`
+\alpha := \alpha \cdot decay
+`$
 
-Updating the Value Function V Based on Beliefs [7]: Where:
-- ai
-: represents the agent's action.
+While Q-Learning computes the policy based on the expected reward in a static environment, Minimax-Q computes the policy by considering the opponent’s potential actions that would cause the most harm. This makes Minimax-Q more suitable for competitive environments where there is a direct conflict of interests between agents.
 
-- a−i
-: represents the opponent's actions.
+Minimax-Q requires solving linear programming problems to compute the policy in each state. This is essential to ensure that the agent’s policy is resilient against the possible harmful actions of the opponent. In contrast, Q-Learning simply selects the action with the highest Q-value without considering the opponent’s strategy.
 
-- Pri(a−i): is the agent's belief about the probability that the opponent will choose action a−i
-- Qt(s, (ai, a−i)): is the action-value function (Q-value) for state s at time t, when agent i selects action ai and the opponent selects action a−i
+### 2.4 Belief-Q
+
+The **Belief-Q** algorithm is a variation of Q-Learning, adapted for environments where agents must account for uncertainty regarding the strategies or actions of their opponents. This algorithm allows the agent to form **beliefs** about the possible actions of their opponents and update those beliefs as new information is received.
+
+**Belief-Q** aims to optimize the agent’s strategy based on the potential reactions of opponents by combining Q-values with the probabilities that opponents will choose certain actions.
+
+As in classical Q-Learning, we initialize a Q-value table for all states $`s`$ and actions $`a`$. Simultaneously, we initialize the beliefs regarding the actions of the opponent. Specifically, at the start, for each state and action of the agent, we create a probability table that represents our beliefs about which actions the opponent might choose. Initially, these beliefs are set to equal values, indicating no preference for any of the opponent's actions (i.e., all opponent actions are considered equally probable). As the agent interacts with the environment, these beliefs are updated based on observations of the opponent's actions, adjusting the probabilities of different opponent actions. Specifically, after each learning step, the probability of each opponent action in the belief table is updated to incorporate the new information.
+
+The agent selects an action $`a`$ based on the policy derived from the updated Q-values and the beliefs about the opponent’s actions. For each possible action, the agent consults the Q-value table (Q-table) to find the corresponding Q-value. This value depends on the agent’s beliefs about the opponent’s possible actions. These beliefs determine the probability that the opponent will choose a particular action.
+The agent multiplies the Q-value for each combination of its own action and the opponent's action by the probability corresponding to the opponent's action, as expressed by the agent's beliefs. The result is a weighted sum of Q-values, where each Q-value for an opponent's action is weighted by the probability that the agent believes the opponent will choose that action. This process produces an overall expected value for the agent’s action, taking into account the different opponent responses and their probabilities. The agent then selects the action that maximizes this expected value, attempting to find the best possible strategy based on its beliefs about the opponent’s actions.
+
+After the agent receives a reward $`r(s_t, a_t)`$ for transitioning from state $`s_t`$ to state $`s_{t+1}`$ by executing action $`a`$, the Q-value is updated [7]:
+
+$`
+Q_{t+1}(s_t, a_t) \leftarrow (1 - \alpha) Q_t(s_t, a_t) + \alpha \left[ r(s_t, a_t, s_{t+1}) + \gamma V_t(s_{t+1}) \right]
+`$
+
+Where:
+
+- $`Q_{t+1}(s_t, a_t)`$: is the updated action-value function Q for state $`s_t`$ and action $`a_t`$ at time step $`t+1`$.
+
+#### Updating the Value Function $`V`$ Based on Beliefs [7]:
+
+$`
+V_t(s) \leftarrow \max_{a_i} \left[ \sum_{a_{-i} \subseteq A_{-i}} Q_t(s, (a_i, a_{-i})) \cdot Pr_i(a_{-i}) \right]
+`$
+
+Where:
+
+- $`a_i`$: represents the agent’s action.
+- $`a_{-i}`$: represents the opponent’s actions.
+- $`Pr_i(a_{-i})`$: is the agent’s belief about the probability that the opponent will choose action $`a_{-i}`$.
+- $`Q_t(s, (a_i, a_{-i}))`$: is the action-value function (Q-value) for state $`s`$ at time $`t`$, when agent $`i`$ selects action $`a_i`$ and the opponent selects action $`a_{-i}`$.
+
 
 # 3. Design Of The Environment And Handling State Complexity
 
