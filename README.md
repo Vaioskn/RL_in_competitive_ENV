@@ -272,11 +272,7 @@ Where:
 
 3.1 **Description of the Environment**
 
-### 3. Design of the Environment and Handling State Complexity
-
-#### 3.1 Description of the Environment
-
-![Image_1.png](ASSETS/Image_1.png)
+![Image_1.PNG](ASSETS/Image_1.PNG)
 
 **Image 1: The Full Environment**
 
@@ -285,9 +281,6 @@ The **Full Environment (FE)**, or complete environment (Image 1), consists of a 
 No entity can move outside the grid. If the ball reaches the left goal, one point is added to the score on the right side (as it is considered a point for the Player). Similarly, if the ball reaches the right goal, a point is added to the left side of the score. If the ball enters a goal or a corner, the environment resets to its initial state (Image 1). The Player takes the first move at the start of the simulation, while after each reset, the first move is given to the one who did *not* make the last move before the reset (i.e., the one who conceded the goal or did not cause the ball to go to a corner). The buttons below the grid define the logic for selecting the corresponding agent’s movement.
 
 The movements of an agent depend on its current state. For example, if an agent is far from the ball and far from the boundaries of the grid, the available movements include six possible directions (light blue cells).
-
-
-
 
 
 
